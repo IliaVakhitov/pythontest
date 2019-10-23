@@ -1,12 +1,7 @@
 from View import view
-from Model import model
+from Model import Dictionary
 
-my_dict = model.Dictionary("English")
-my_dict.add_new_entry("one", "один")
-my_dict.add_new_entry("two", "два")
-my_dict.add_new_entry("three", "три")
-my_dict.add_new_entry("four", "четыре")
 
-view.printStr(my_dict.name)
-my_dict.write_to_json(my_dict.name + ".json")
-view.printStr(my_dict.json_data)
+my_dict = Dictionary.Dictionary("")
+my_dict.read_from_json("Numbers.json")
+view.print_str(my_dict.print_information())
