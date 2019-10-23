@@ -32,6 +32,26 @@
             "word": "six",
             "translation": "шесть",
             "learnIndex": 0
+        },
+        {
+            "word": "seven",
+            "translation": "семь",
+            "learnIndex": 0
+        },
+        {
+            "word": "eight",
+            "translation": "восемь",
+            "learnIndex": 0
+        },
+        {
+            "word": "nine",
+            "translation": "дквять",
+            "learnIndex": 0
+        },
+        {
+            "word": "ten",
+            "translation": "десять",
+            "learnIndex": 0
         }
     ]
 }

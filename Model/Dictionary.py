@@ -10,13 +10,11 @@ Dictionary entry
 
 
 class DictEntry:
-    word = ""
-    translation = ""
-    learnIndex = 0
 
     def __init__(self, word, translation):
         self.word = word
         self.translation = translation
+        self.learnIndex = 0
 
     def set_learn_index(self, value):
         if value < 0:
@@ -48,13 +46,12 @@ Class stores DictEntries as a list
 
 
 class Dictionary:
-    name = ""
-    native_language = ""
-    foreign_language = ""
-    words = []
 
     def __init__(self, dict_name):
         self.name = dict_name
+        self.words = []
+        self.native_language = ""
+        self.foreign_language = ""
 
     def write_to_json(self, filename):
         json_data = self.generate_json_data()
@@ -115,3 +112,4 @@ class Dictionary:
 
     def remove_dict_entry(self, dict_entry):
         self.words.remove(dict_entry)
+

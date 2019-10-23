@@ -1,7 +1,4 @@
-from View import view
-from Model import Dictionary
+from Model.model import *
 
-
-my_dict = Dictionary.Dictionary("")
-my_dict.read_from_json("Numbers.json")
-view.print_str(my_dict.print_information())
+load_dictionaries()
+print_dictionaries()
