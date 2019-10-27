@@ -1,16 +1,19 @@
 from View import view
 from Model.Dictionary import Dictionary
+from Model.Dictionary import DictionaryLoaderJson
 import os
 
 my_dictionaries = []
 
 
 def load_dictionaries():
+    dictionaryloader = DictionaryLoaderJson()
     for file in os.listdir("Dictionaries"):
         if file.endswith(".json"):
             my_dict = Dictionary("")
-            my_dict.read_from_json(os.path.join("Dictionaries", file))
-            my_dictionaries.append(my_dict)
+            dictionaryloader.filename = os.path.join("Dictionaries", file)
+            if dictionaryloader.load_dictionary(my_dict):
+                my_dictionaries.append(my_dict)
 
 
 def print_dictionaries():
@@ -20,6 +23,27 @@ def print_dictionaries():
 
 def generate_game(words_number):
     pass
+
+
+def mix_list(my_list):
+    pass
+
+
+class GameRound:
+    def __init__(self, word, translation1, translation2, translation3, translation4, correct_answer, correct_index):
+        self.word = word
+        self.translation1 = translation1
+        self.translation2 = translation2
+        self.translation3 = translation3
+        self.translation4 = translation4
+        self.correct_answer = correct_answer
+        self.correct_index = correct_index
+
+    def is_answer_correct(self, answer):
+        return answer == self.correct_answer
+
+    def is_index_correct(self, index):
+        return index == self.correct_index
 
 
 class Model:

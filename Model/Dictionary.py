@@ -53,43 +53,6 @@ class Dictionary:
         self.native_language = ""
         self.foreign_language = ""
 
-    def write_to_json(self, filename):
-        json_data = self.generate_json_data()
-        try:
-            with open(filename, 'w') as outfile:
-                json.dump(json_data, outfile, indent=4, ensure_ascii=False)
-        except IOError:
-            pass
-
-    def read_from_json(self, filename):
-        try:
-            with open(filename) as json_file:
-                json_data = json.load(json_file)
-        except FileNotFoundError:
-            print("File not found {}".format(filename))
-        except IOError:
-            print("File read error {}".format(filename))
-        self.name = json_data['name']
-        self.native_language = json_data['native_language']
-        self.foreign_language = json_data['foreign_language']
-        self.words.clear()
-        for entry in json_data['words']:
-            self.words.append(DictEntry(entry['word'], entry['translation']))
-
-    def generate_json_data(self):
-        json_data = {'name': self.name,
-                     'native_language': self.native_language,
-                     'foreign_language': self.foreign_language,
-                     'words': []}
-        for word in self.words:
-            json_data['words'].append({
-                'word': word.word,
-                'translation': word.translation,
-                'learnIndex': word.learnIndex,
-            })
-
-        return json_data
-
     def add_new_entry(self, word, translation):
         self.words.append(DictEntry(word, translation))
 
@@ -113,3 +76,60 @@ class Dictionary:
     def remove_dict_entry(self, dict_entry):
         self.words.remove(dict_entry)
 
+
+class DictionaryLoader:
+
+    def write_dictionary(self, dictionary):
+        pass
+
+    def load_dictionary(self, dictionary):
+        pass
+
+
+class DictionaryLoaderJson(DictionaryLoader):
+
+    def __init__(self):
+        self.filename = ""
+
+    def write_dictionary(self, dictionary):
+        json_data = self.generate_json_data(dictionary)
+        try:
+            with open(self.filename, 'w') as outfile:
+                json.dump(json_data, outfile, indent=4, ensure_ascii=False)
+        except IOError:
+            return False
+        return True
+
+    def load_dictionary(self, dictionary):
+        try:
+            with open(self.filename) as json_file:
+                json_data = json.load(json_file)
+        except FileNotFoundError:
+            print("File not found {}".format(self.filename))
+            return False
+        except IOError:
+            print("File read error {}".format(self.filename))
+            return False
+
+        dictionary.name = json_data['name']
+        dictionary.native_language = json_data['native_language']
+        dictionary.foreign_language = json_data['foreign_language']
+        dictionary.words.clear()
+        for entry in json_data['words']:
+            dictionary.words.append(DictEntry(entry['word'], entry['translation']))
+        return True
+
+    @staticmethod
+    def generate_json_data(dictionary):
+        json_data = {'name': dictionary.name,
+                     'native_language': dictionary.native_language,
+                     'foreign_language': dictionary.foreign_language,
+                     'words': []}
+        for word in dictionary.words:
+            json_data['words'].append({
+                'word': word.word,
+                'translation': word.translation,
+                'learnIndex': word.learnIndex,
+            })
+
+        return json_data
