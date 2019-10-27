@@ -2,6 +2,7 @@ from View import view
 from Model.Dictionary import Dictionary
 from Model.Dictionary import DictionaryLoaderJson
 import os
+import random
 
 my_dictionaries = []
 
@@ -26,7 +27,21 @@ def generate_game(words_number):
 
 
 def mix_list(my_list):
-    pass
+    list_length = len(my_list) - 1
+    indexes = []
+    for i in range(list_length + 1):
+        added = False
+        while not added:
+            new_index = random.randint(0, list_length)
+            if new_index not in indexes:
+                indexes.append(new_index)
+                added = True
+
+    new_list = []
+    for i in indexes:
+        new_list.append(my_list[i])
+
+    return new_list
 
 
 class GameRound:
@@ -48,3 +63,5 @@ class GameRound:
 
 class Model:
     pass
+
+
