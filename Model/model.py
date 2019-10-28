@@ -30,14 +30,41 @@ def get_random_translation(all_words, word):
     return new_word.translation
 
 
-def generate_game(words_number = 0):
+def play_game(game_rounds):
+    view.print_str("Game starts!")
+    view.print_str("Print exit() for exit")
+    for game_round in game_rounds:
+        view.print_str(game_round.print_game_round())
+        index_str = view.input_str("Please, choose correct word:")
+        try:
+            index = int(index_str) - 1
+        except:
+            index = 0
+        if index == game_round.correct_index:
+            view.print_str("Correct!")
+        else:
+            view.print_str("InCorrect!")
+
+
+def generate_game(words_number=0):
+    """
+    Generates list of GameRounds
+    :return
+    None - if no words is dictionaries
+    List of GameRounds:
+    """
     all_words = []
     game_rounds = []
     for next_dictionary in my_dictionaries:
         all_words += next_dictionary.words
+    # No words in dictionaries
+    if len(all_words) == 0:
+        return None
 
     all_words = mix_list(all_words)
     for next_word in all_words:
+        if 0 < words_number <= len(game_rounds):
+            break
         translations = [next_word.translation]
         for i in range(3):
             translations.append(get_random_translation(all_words, next_word))
@@ -73,6 +100,10 @@ def mix_list(my_list):
 
 
 class GameRound:
+    """
+    Contains word and 4 different translations to guess
+    Correct answer and correct answer`s index for fast check
+    """
     def __init__(self, word, translations, correct_answer, correct_index):
         self.word = word
         self.translation1 = translations[0]
@@ -90,13 +121,16 @@ class GameRound:
 
     def print_game_round(self):
         return_str = self.word + "\n"
-        return_str += self.translation1 + " "
-        return_str += self.translation2 + " "
-        return_str += self.translation3 + " "
-        return_str += self.translation4 + "\n"
-        return_str += "Correct {} - {} ".format(self.correct_answer, self.correct_index)
+        return_str += "1. " + self.translation1 + " "
+        return_str += "2. " + self.translation2 + " "
+        return_str += "3. " + self.translation3 + " "
+        return_str += "4. " + self.translation4
         return return_str
 
+    def print_game_round_full(self):
+        return_str = self.print_game_round()
+        return_str += "Correct {} - {} ".format(self.correct_answer, self.correct_index)
+        return return_str
 
 class Model:
     pass

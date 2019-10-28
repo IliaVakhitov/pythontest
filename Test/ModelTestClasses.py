@@ -1,5 +1,6 @@
 import unittest
-from Model.model import mix_list
+from Model.model import mix_list, load_dictionaries
+from Model.model import generate_game
 
 
 # TODO
@@ -11,6 +12,12 @@ ut.sort(key=lambda x: x.count,
 
 
 class ModelTests(unittest.TestCase):
+
+    def test_game_generation(self):
+        load_dictionaries()
+        for i in range(10):
+            game_rounds = generate_game(i+1)
+            self.assertEqual(i+1, len(game_rounds), "Rounds in game should be equal!")
 
     def test_sort_length(self):
         my_list = list(range(500))

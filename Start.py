@@ -3,6 +3,8 @@ from Model.Dictionary import DictionaryLoaderJson
 from Test.ModelTestClasses import ModelTests
 
 load_dictionaries()
-game_rounds = generate_game(0)
-for game_round in game_rounds:
-    view.print_str(game_round.print_game_round())
+game_rounds = generate_game(5)
+if game_rounds is None:
+    pass
+
+play_game(game_rounds)
