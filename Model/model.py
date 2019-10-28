@@ -28,18 +28,12 @@ def generate_game(words_number):
 
 def mix_list(my_list):
     list_length = len(my_list) - 1
-    indexes = []
-    for i in range(list_length + 1):
-        added = False
-        while not added:
-            new_index = random.randint(0, list_length)
-            if new_index not in indexes:
-                indexes.append(new_index)
-                added = True
-
+    tmp_list = my_list.copy()
     new_list = []
-    for i in indexes:
-        new_list.append(my_list[i])
+    for i in range(list_length + 1):
+        new_list.append(
+            tmp_list.pop(
+                random.randint(0, len(tmp_list)-1)))
 
     return new_list
 

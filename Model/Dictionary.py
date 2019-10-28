@@ -1,3 +1,4 @@
+import codecs
 import json
 
 
@@ -94,7 +95,7 @@ class DictionaryLoaderJson(DictionaryLoader):
     def write_dictionary(self, dictionary):
         json_data = self.generate_json_data(dictionary)
         try:
-            with open(self.filename, 'w') as outfile:
+            with codecs.open(self.filename, 'w', "utf-8") as outfile:
                 json.dump(json_data, outfile, indent=4, ensure_ascii=False)
         except IOError:
             return False
@@ -102,7 +103,7 @@ class DictionaryLoaderJson(DictionaryLoader):
 
     def load_dictionary(self, dictionary):
         try:
-            with open(self.filename) as json_file:
+            with codecs.open(self.filename, 'r', "utf-8") as json_file:
                 json_data = json.load(json_file)
         except FileNotFoundError:
             print("File not found {}".format(self.filename))
