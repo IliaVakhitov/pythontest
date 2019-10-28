@@ -97,8 +97,9 @@ class DictionaryLoaderJson(DictionaryLoader):
         try:
             with codecs.open(self.filename, 'w', "utf-8") as outfile:
                 json.dump(json_data, outfile, indent=4, ensure_ascii=False)
-        except IOError:
+        except:
             return False
+
         return True
 
     def load_dictionary(self, dictionary):
@@ -109,6 +110,9 @@ class DictionaryLoaderJson(DictionaryLoader):
             print("File not found {}".format(self.filename))
             return False
         except IOError:
+            print("File read error {}".format(self.filename))
+            return False
+        except:
             print("File read error {}".format(self.filename))
             return False
 
