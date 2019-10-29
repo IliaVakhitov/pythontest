@@ -1,10 +1,15 @@
 from Model.model import *
-from Model.Dictionary import DictionaryLoaderJson
-from Test.ModelTestClasses import ModelTests
+import logging
+
+logging.basicConfig(level=logging.INFO,
+                    filename='app.log',
+                    filemode='a',
+                    format='%(levelname)s %(asctime)s - %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S')
 
 load_dictionaries()
-game_rounds = generate_game(5)
+game_rounds = generate_game(50)
 if game_rounds is None:
-    pass
+    exit()
 
 play_game(game_rounds)

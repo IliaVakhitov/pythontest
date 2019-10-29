@@ -1,16 +1,15 @@
 import codecs
 import json
-
-
-"""
-Dictionary entry
-    word - word in foreign language , 
-    translation  - in native language
-    learn index - int in range [0,100]
-"""
+import logging
 
 
 class DictEntry:
+    """
+    Dictionary entry
+        word - word in foreign language ,
+        translation  - in native language
+        learn index - int in range [0,100]
+    """
 
     def __init__(self, word, translation):
         self.word = word
@@ -41,12 +40,10 @@ class DictEntry:
         return "{} - {} : {}".format(self.word, self.translation, self.learnIndex)
 
 
-"""
-Class stores DictEntries as a list
-"""
-
-
 class Dictionary:
+    """
+    Class stores DictEntries as a list
+    """
 
     def __init__(self, dict_name):
         self.name = dict_name
@@ -88,7 +85,9 @@ class DictionaryLoader:
 
 
 class DictionaryLoaderJson(DictionaryLoader):
-
+    """
+    Class allows load and save dictionary form/to JSON-file
+    """
     def __init__(self):
         self.filename = ""
 
@@ -98,6 +97,7 @@ class DictionaryLoaderJson(DictionaryLoader):
             with codecs.open(self.filename, 'w', "utf-8") as outfile:
                 json.dump(json_data, outfile, indent=4, ensure_ascii=False)
         except:
+            logging.error("Error writing file {}".format(self.filename))
             return False
 
         return True
@@ -107,13 +107,19 @@ class DictionaryLoaderJson(DictionaryLoader):
             with codecs.open(self.filename, 'r', "utf-8") as json_file:
                 json_data = json.load(json_file)
         except FileNotFoundError:
-            print("File not found {}".format(self.filename))
+            error_message = "File not found {}".format(self.filename)
+            print(error_message)
+            logging.error(error_message)
             return False
         except IOError:
-            print("File read error {}".format(self.filename))
+            error_message = "File read error {}".format(self.filename)
+            print(error_message)
+            logging.error(error_message)
             return False
         except:
-            print("File read error {}".format(self.filename))
+            error_message = "File general error {}".format(self.filename)
+            print(error_message)
+            logging.error(error_message)
             return False
 
         dictionary.name = json_data['name']

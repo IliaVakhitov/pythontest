@@ -3,28 +3,25 @@ from Model.model import mix_list, load_dictionaries
 from Model.model import generate_game
 
 
-# TODO
-""" 
-test words mixing and sorting
-ut.sort(key=lambda x: x.count, 
-
-"""
-
-
 class ModelTests(unittest.TestCase):
 
     def test_game_generation(self):
         load_dictionaries()
-        for i in range(10):
+        for i in range(16):
             game_rounds = generate_game(i+1)
             self.assertEqual(i+1, len(game_rounds), "Rounds in game should be equal!")
 
     def test_sort_length(self):
-        my_list = list(range(500))
-        init_length = len(my_list)
         for i in range(100):
-            new_list = mix_list(my_list)
-            self.assertEqual(init_length, len(new_list), "Should be equal!")
+            my_list = list(range(i))
+            init_length = len(my_list)
+            for j in range(i):
+                new_list = mix_list(my_list)
+                self.assertEqual(init_length, len(new_list), "Should be equal!")
+
+    def test_random_translation(self):
+        # TODO make up this test
+        load_dictionaries()
 
     def test_sort_lists(self):
         my_list = list(range(500))
