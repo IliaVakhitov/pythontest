@@ -1,109 +1,121 @@
 from View import view
-from Model.Dictionary import Dictionary
+from Model.Dictionary import Dictionary, DictionaryLoadedXls
 from Model.Dictionary import DictionaryLoaderJson
 import os
 import random
 import logging
 
-my_dictionaries = []
 
+class Model:
+    def __init__(self):
+        self.my_dictionaries = []
 
-def load_dictionaries():
-    logging.info("Loading dictionaries.")
-    dictionaryloader = DictionaryLoaderJson()
-    for file in os.listdir("Dictionaries"):
-        if file.endswith(".json"):
-            logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
-            my_dict = Dictionary("")
-            dictionaryloader.filename = os.path.join("Dictionaries", file)
-            if dictionaryloader.load_dictionary(my_dict):
-                logging.info("Dictionary {} added".format(my_dict.name))
-                logging.info("Total words {} ".format(len(my_dict.words)))
-                my_dictionaries.append(my_dict)
-    logging.info("Total dictionaries loaded {}".format(len(my_dictionaries)))
+    def load_dictionaries(self):
+        logging.info("Loading dictionaries.")
+        dictionary_loader_json = DictionaryLoaderJson()
+        dictionary_loader_xls = DictionaryLoadedXls()
+        for file in os.listdir("Dictionaries"):
+            # Loading JSON files
+            if file.endswith(".json"):
+                logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
+                my_dict = Dictionary("")
+                dictionary_loader_json.filename = os.path.join("Dictionaries", file)
+                if dictionary_loader_json.load_dictionary(my_dict):
+                    logging.info("Dictionary {} added".format(my_dict.name))
+                    logging.info("Total words {} ".format(len(my_dict.words)))
+                    self.my_dictionaries.append(my_dict)
 
+            if file.endswith(".xls"):
+                # Loading XLS files
+                logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
 
-def print_dictionaries():
-    for my_dict in my_dictionaries:
-        view.print_str(my_dict.print_information())
+                dictionary_loader_xls.filename = os.path.join("Dictionaries", file)
+                xls_dictionaries = dictionary_loader_xls.load_dictionaries()
 
+        self.my_dictionaries += xls_dictionaries
 
-def get_random_translation(all_words, translation, translations):
-    new_word = all_words[random.randint(0, len(all_words) - 1)]
-    while (new_word.translation == translation) or (new_word.translation in translations):
+        logging.info("Total dictionaries loaded {}".format(len(self.my_dictionaries)))
+
+    def print_dictionaries(self):
+        for my_dict in self.my_dictionaries:
+            view.print_str(my_dict.print_information())
+
+    @staticmethod
+    def get_random_translation(all_words, translation, translations):
         new_word = all_words[random.randint(0, len(all_words) - 1)]
+        while (new_word.translation == translation) or (new_word.translation in translations):
+            new_word = all_words[random.randint(0, len(all_words) - 1)]
 
-    return new_word.translation
+        return new_word.translation
 
+    @staticmethod
+    def play_game(game_rounds):
+        view.print_str("Game starts!")
+        view.print_str("Print exit() for exit")
+        logging.info("New game started")
+        correct_answers = 0
+        incorrect_answers = 0
+        for game_round in game_rounds:
+            view.print_str(game_round.print_game_round())
+            logging.info("Word {} correct answer {}".format(game_round.word, game_round.correct_index))
+            index = view.input_user_answer("Please, choose correct word:")
+            logging.info("User answer {} is {}".format(
+                index,
+                "correct" if index == game_round.correct_index else "incorrect"))
+            if index == game_round.correct_index:
+                correct_answers += 1
+                # view.print_str("Correct!")
+            else:
+                incorrect_answers += 1
+                # view.print_str("InCorrect!")
+        logging.info("Game ended. Correct answers {}. Incorrect answers {}". format(correct_answers, incorrect_answers))
 
-def play_game(game_rounds):
-    view.print_str("Game starts!")
-    view.print_str("Print exit() for exit")
-    logging.info("New game started")
-    correct_answers = 0
-    incorrect_answers = 0
-    for game_round in game_rounds:
-        view.print_str(game_round.print_game_round())
-        logging.info("Word {} correct answer {}".format(game_round.word, game_round.correct_index))
-        index = view.input_user_answer("Please, choose correct word:")
-        logging.info("User answer {} is {}".format(
-            index,
-            "correct" if index == game_round.correct_index else "incorrect"))
-        if index == game_round.correct_index:
-            correct_answers += 1
-            # view.print_str("Correct!")
-        else:
-            incorrect_answers += 1
-            # view.print_str("InCorrect!")
-    logging.info("Game ended. Correct answers {}. Incorrect answers {}". format(correct_answers, incorrect_answers))
+    @staticmethod
+    def mix_list(my_list):
+        list_length = len(my_list)
+        tmp_list = my_list.copy()
+        new_list = []
+        for i in range(list_length):
+            new_list.append(
+                tmp_list.pop(
+                    random.randint(0, len(tmp_list) - 1)))
 
+        return new_list
 
-def generate_game(words_number=0):
-    """
-    Generates list of GameRounds
-    return
-    None - if no words is dictionaries
-    List of GameRounds:
-    """
-    all_words = []
-    game_rounds = []
-    for next_dictionary in my_dictionaries:
-        all_words += next_dictionary.words
-    if len(all_words) == 0:
-        # No words in dictionaries
-        return None
+    def generate_game(self, words_number=0):
+        """
+        Generates list of GameRounds
+        return
+        None - if no words is dictionaries
+        List of GameRounds:
+        """
+        all_words = []
+        game_rounds = []
+        for next_dictionary in self.my_dictionaries:
+            all_words += next_dictionary.words
+        if len(all_words) == 0:
+            # No words in dictionaries
+            return None
 
-    all_words = mix_list(all_words)
-    for next_word in all_words:
-        if 0 < words_number <= len(game_rounds):
-            break
-        correct_index = random.randint(0, 3)
-        translations = []
-        for i in range(3):
-            translations.append(get_random_translation(all_words, next_word.translation, translations))
-        translations.insert(correct_index, next_word.translation)
-        # New game round. Index + 1 [1-4]
-        game_rounds.append(
-            GameRound(
-                next_word.word,
-                translations,
-                next_word.translation,
-                correct_index + 1
-            ))
+        all_words = Model.mix_list(all_words)
+        for next_word in all_words:
+            if 0 < words_number <= len(game_rounds):
+                break
+            correct_index = random.randint(0, 3)
+            translations = []
+            for i in range(3):
+                translations.append(Model.get_random_translation(all_words, next_word.translation, translations))
+            translations.insert(correct_index, next_word.translation)
+            # New game round. Index + 1 [1-4]
+            game_rounds.append(
+                GameRound(
+                    next_word.word,
+                    translations,
+                    next_word.translation,
+                    correct_index + 1
+                ))
 
-    return game_rounds
-
-
-def mix_list(my_list):
-    list_length = len(my_list)
-    tmp_list = my_list.copy()
-    new_list = []
-    for i in range(list_length):
-        new_list.append(
-            tmp_list.pop(
-                random.randint(0, len(tmp_list) - 1)))
-
-    return new_list
+        return game_rounds
 
 
 class GameRound:
@@ -141,5 +153,3 @@ class GameRound:
         return return_str
 
 
-class Model:
-    pass

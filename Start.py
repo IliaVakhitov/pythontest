@@ -1,5 +1,6 @@
-from Model.model import *
 import logging
+
+from Model.model import Model
 
 logging.basicConfig(level=logging.INFO,
                     filename='app.log',
@@ -7,9 +8,11 @@ logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s %(asctime)s - %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S')
 
-load_dictionaries()
-game_rounds = generate_game(50)
+my_model = Model()
+my_model.load_dictionaries()
+game_rounds = my_model.generate_game(5)
 if game_rounds is None:
     exit()
 
-play_game(game_rounds)
+#my_model.play_game(game_rounds)
+
