@@ -1,14 +1,16 @@
 from View import view
-from Model.Dictionary import Dictionary, DictionaryLoadedXls
+from Model.Dictionary import Dictionary, DictionaryLoadedXls, DictEntry
 from Model.Dictionary import DictionaryLoaderJson
 import os
 import random
 import logging
+from typing import List
 
 
 class Model:
     def __init__(self):
-        self.my_dictionaries = []
+        self.my_dictionaries: List[Dictionary] = []  # Dictionary
+        self.all_words: List[DictEntry] = []  # DictEntry
 
     def load_dictionaries(self):
         logging.info("Loading dictionaries.")
@@ -18,21 +20,21 @@ class Model:
             # Loading JSON files
             if file.endswith(".json"):
                 logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
-                my_dict = Dictionary("")
                 dictionary_loader_json.filename = os.path.join("Dictionaries", file)
-                if dictionary_loader_json.load_dictionary(my_dict):
-                    logging.info("Dictionary {} added".format(my_dict.name))
-                    logging.info("Total words {} ".format(len(my_dict.words)))
+                my_dict = dictionary_loader_json.load_dictionary()
+                if my_dict is not None:
                     self.my_dictionaries.append(my_dict)
+                    self.all_words += my_dict.words
 
             if file.endswith(".xls"):
                 # Loading XLS files
                 logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
-
                 dictionary_loader_xls.filename = os.path.join("Dictionaries", file)
                 xls_dictionaries = dictionary_loader_xls.load_dictionaries()
-
-        self.my_dictionaries += xls_dictionaries
+                if xls_dictionaries is not None:
+                    self.my_dictionaries += xls_dictionaries
+                    for my_dict in xls_dictionaries:
+                        self.all_words += my_dict.words
 
         logging.info("Total dictionaries loaded {}".format(len(self.my_dictionaries)))
 
@@ -41,7 +43,7 @@ class Model:
             view.print_str(my_dict.print_information())
 
     @staticmethod
-    def get_random_translation(all_words, translation, translations):
+    def get_random_translation(all_words, translation, translations) -> str:
         new_word = all_words[random.randint(0, len(all_words) - 1)]
         while (new_word.translation == translation) or (new_word.translation in translations):
             new_word = all_words[random.randint(0, len(all_words) - 1)]
@@ -49,7 +51,7 @@ class Model:
         return new_word.translation
 
     @staticmethod
-    def play_game(game_rounds):
+    def play_game(game_rounds) -> None:
         view.print_str("Game starts!")
         view.print_str("Print exit() for exit")
         logging.info("New game started")
@@ -61,8 +63,8 @@ class Model:
             index = view.input_user_answer("Please, choose correct word:")
             logging.info("User answer {} is {}".format(
                 index,
-                "correct" if index == game_round.correct_index else "incorrect"))
-            if index == game_round.correct_index:
+                "correct" if game_round.is_index_correct(index) else "incorrect"))
+            if game_round.is_index_correct(index):
                 correct_answers += 1
                 # view.print_str("Correct!")
             else:
@@ -71,7 +73,7 @@ class Model:
         logging.info("Game ended. Correct answers {}. Incorrect answers {}". format(correct_answers, incorrect_answers))
 
     @staticmethod
-    def mix_list(my_list):
+    def mix_list(my_list) -> List:
         list_length = len(my_list)
         tmp_list = my_list.copy()
         new_list = []
@@ -82,22 +84,20 @@ class Model:
 
         return new_list
 
-    def generate_game(self, words_number=0):
+    def generate_game(self, words_number=0) -> None:
         """
         Generates list of GameRounds
         return
         None - if no words is dictionaries
         List of GameRounds:
         """
-        all_words = []
-        game_rounds = []
-        for next_dictionary in self.my_dictionaries:
-            all_words += next_dictionary.words
-        if len(all_words) == 0:
+        game_rounds: List[GameRound] = []  # GameRound
+
+        if len(self.all_words) == 0:
             # No words in dictionaries
             return None
 
-        all_words = Model.mix_list(all_words)
+        all_words = Model.mix_list(self.all_words)
         for next_word in all_words:
             if 0 < words_number <= len(game_rounds):
                 break
@@ -133,13 +133,13 @@ class GameRound:
         self.correct_answer = correct_answer
         self.correct_index = correct_index
 
-    def is_answer_correct(self, answer):
+    def is_answer_correct(self, answer) -> bool:
         return answer == self.correct_answer
 
-    def is_index_correct(self, index):
+    def is_index_correct(self, index) -> bool:
         return index == self.correct_index
 
-    def print_game_round(self):
+    def print_game_round(self) -> str:
         return_str = self.word + "\n"
         return_str += "1. " + self.translation1 + "\n"
         return_str += "2. " + self.translation2 + "\n"
@@ -147,7 +147,7 @@ class GameRound:
         return_str += "4. " + self.translation4
         return return_str
 
-    def print_game_round_with_answer(self):
+    def print_game_round_with_answer(self) -> str:
         return_str = self.print_game_round()
         return_str += "Correct {} - {} ".format(self.correct_answer, self.correct_index)
         return return_str

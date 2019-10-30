@@ -14,5 +14,5 @@ game_rounds = my_model.generate_game(5)
 if game_rounds is None:
     exit()
 
-#my_model.play_game(game_rounds)
+my_model.play_game(game_rounds)
 
