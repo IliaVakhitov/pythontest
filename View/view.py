@@ -1,12 +1,12 @@
 import logging
 
 
-def print_str(str):
-    print(str)
+def print_str(message) -> None:
+    print(message)
 
 
-def input_str(str):
-    read_str = input(str)
+def input_str(message) -> str:
+    read_str = input(message)
     logging.info("User input {}".format(read_str))
     if read_str == "exit()":
         logging.info("User exit")
@@ -14,7 +14,7 @@ def input_str(str):
     return read_str
 
 
-def input_user_answer(message=""):
+def input_user_answer(message="") -> int:
     read_str = input_str(message)
     try:
         index = int(read_str)

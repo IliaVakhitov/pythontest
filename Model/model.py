@@ -1,16 +1,25 @@
 from View import view
-from Model.Dictionary import Dictionary, DictionaryLoadedXls, DictEntry
-from Model.Dictionary import DictionaryLoaderJson
+from Model.Dictionary import Dictionary, DictionaryLoadedXls, DictEntry, DictionaryLoaderJson
 import os
 import random
 import logging
-from typing import List
+from typing import List, Optional
+from enum import Enum
+
+
+class GameType(Enum):
+    FindTranslation = 1
+    FindWord = 2
 
 
 class Model:
     def __init__(self):
-        self.my_dictionaries: List[Dictionary] = []  # Dictionary
-        self.all_words: List[DictEntry] = []  # DictEntry
+        self.my_dictionaries: List[Dictionary] = []
+        self.all_words: List[DictEntry] = []
+
+    def generate_game(self, game_type: GameType, words_number=0):
+        #
+        return GameGenerator.generate_game(self.all_words, game_type, words_number)
 
     def load_dictionaries(self):
         logging.info("Loading dictionaries.")
@@ -43,14 +52,6 @@ class Model:
             view.print_str(my_dict.print_information())
 
     @staticmethod
-    def get_random_translation(all_words, translation, translations) -> str:
-        new_word = all_words[random.randint(0, len(all_words) - 1)]
-        while (new_word.translation == translation) or (new_word.translation in translations):
-            new_word = all_words[random.randint(0, len(all_words) - 1)]
-
-        return new_word.translation
-
-    @staticmethod
     def play_game(game_rounds) -> None:
         view.print_str("Game starts!")
         view.print_str("Print exit() for exit")
@@ -71,51 +72,6 @@ class Model:
                 incorrect_answers += 1
                 # view.print_str("InCorrect!")
         logging.info("Game ended. Correct answers {}. Incorrect answers {}". format(correct_answers, incorrect_answers))
-
-    @staticmethod
-    def mix_list(my_list) -> List:
-        list_length = len(my_list)
-        tmp_list = my_list.copy()
-        new_list = []
-        for i in range(list_length):
-            new_list.append(
-                tmp_list.pop(
-                    random.randint(0, len(tmp_list) - 1)))
-
-        return new_list
-
-    def generate_game(self, words_number=0) -> None:
-        """
-        Generates list of GameRounds
-        return
-        None - if no words is dictionaries
-        List of GameRounds:
-        """
-        game_rounds: List[GameRound] = []  # GameRound
-
-        if len(self.all_words) == 0:
-            # No words in dictionaries
-            return None
-
-        all_words = Model.mix_list(self.all_words)
-        for next_word in all_words:
-            if 0 < words_number <= len(game_rounds):
-                break
-            correct_index = random.randint(0, 3)
-            translations = []
-            for i in range(3):
-                translations.append(Model.get_random_translation(all_words, next_word.translation, translations))
-            translations.insert(correct_index, next_word.translation)
-            # New game round. Index + 1 [1-4]
-            game_rounds.append(
-                GameRound(
-                    next_word.word,
-                    translations,
-                    next_word.translation,
-                    correct_index + 1
-                ))
-
-        return game_rounds
 
 
 class GameRound:
@@ -152,4 +108,84 @@ class GameRound:
         return_str += "Correct {} - {} ".format(self.correct_answer, self.correct_index)
         return return_str
 
+
+class GameGenerator:
+    @staticmethod
+    def mix_list(my_list) -> List:
+        list_length = len(my_list)
+        tmp_list = my_list.copy()
+        new_list = []
+        for i in range(list_length):
+            new_list.append(
+                tmp_list.pop(
+                    random.randint(0, len(tmp_list) - 1)))
+
+        return new_list
+
+    @staticmethod
+    def get_random_translation(all_words: List[DictEntry], game_type: GameType, used_value: str, used_values: List[str]) -> str:
+        new_word = all_words[random.randint(0, len(all_words) - 1)]
+        if game_type == GameType.FindTranslation:
+            while (new_word.translation == used_value) or (new_word.translation in used_values):
+                new_word = all_words[random.randint(0, len(all_words) - 1)]
+        elif game_type == GameType.FindWord:
+            while (new_word.word == used_value) or (new_word.word in used_values):
+                new_word = all_words[random.randint(0, len(all_words) - 1)]
+
+        return_value = ""
+        if game_type == GameType.FindTranslation:
+            return_value = new_word.translation
+        elif game_type == GameType.FindWord:
+            return_value = new_word.word
+        return return_value
+
+    @staticmethod
+    def generate_game(words_list: List[DictEntry], game_type: GameType, words_number=0) -> Optional[List[GameRound]]:
+        """
+        Generates list of GameRounds
+        return
+        None - if no words is dictionaries
+        List of GameRounds:
+        """
+        game_rounds: List[GameRound] = []
+
+        if len(words_list) == 0:
+            # No words in dictionaries
+            return None
+
+        all_words = GameGenerator.mix_list(words_list)
+        for next_word in all_words:
+            if 0 < words_number <= len(game_rounds):
+                break
+            correct_index = random.randint(0, 3)
+            translations = []
+            if game_type == GameType.FindTranslation:
+                value = next_word.translation
+            elif game_type == GameType.FindWord:
+                value = next_word.word
+            for i in range(3):
+                translations.append(
+                    GameGenerator.get_random_translation(
+                        all_words, game_type, value, translations))
+
+            translations.insert(correct_index, value)
+            # New game round. Index + 1 [1-4]
+            if game_type == GameType.FindTranslation:
+                game_rounds.append(
+                    GameRound(
+                        next_word.word,
+                        translations,
+                        next_word.translation,
+                        correct_index + 1
+                    ))
+            elif game_type == GameType.FindWord:
+                game_rounds.append(
+                    GameRound(
+                        next_word.translation,
+                        translations,
+                        next_word.word,
+                        correct_index + 1
+                    ))
+
+        return game_rounds
 
