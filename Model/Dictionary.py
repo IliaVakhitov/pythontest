@@ -28,10 +28,10 @@ class DictEntry:
             self.learnIndex = value
 
     def increase_learn_index(self) -> None:
-        self.learnIndex += (1 if self.learnIndex < 100 else 0)
+        self.learnIndex += (5 if self.learnIndex < 100 else 0)
 
     def decrease_learn_index(self) -> None:
-        self.learnIndex -= (1 if self.learnIndex > 0 else 0)
+        self.learnIndex -= (5 if self.learnIndex > 0 else 0)
 
     def set_word(self, value) -> None:
         self.word = value
@@ -80,10 +80,10 @@ class Dictionary:
 
 class DictionaryLoader:
 
-    def write_dictionary(self, dictionary):
+    def write_dictionaries(self, dictionary):
         pass
 
-    def load_dictionary(self, dictionary):
+    def load_dictionaries(self, dictionary):
         pass
 
 
@@ -92,7 +92,7 @@ class DictionaryLoadedXls(DictionaryLoader):
         self.filename = ""
 
     def load_dictionaries(self):
-        dictionaries: List[Dictionary] = []  # Dictionary
+        dictionaries: List[Dictionary] = []
         try:
             workbook = xlrd.open_workbook(self.filename)
             worksheet = workbook.sheet_by_index(0)
@@ -133,8 +133,8 @@ class DictionaryLoaderJson(DictionaryLoader):
     def __init__(self):
         self.filename = ""
 
-    def write_dictionary(self, dictionary: Dictionary) -> bool:
-        json_data = self.generate_json_data(dictionary)
+    def write_dictionaries(self, dictionaries: List[Dictionary]) -> bool:
+        json_data = self.generate_json_data(dictionaries)
         try:
             with codecs.open(self.filename, 'w', "utf-8") as outfile:
                 json.dump(json_data, outfile, indent=4, ensure_ascii=False)
@@ -144,7 +144,7 @@ class DictionaryLoaderJson(DictionaryLoader):
 
         return True
 
-    def load_dictionary(self):
+    def load_dictionaries(self):
         try:
             with codecs.open(self.filename, 'r', "utf-8") as json_file:
                 json_data = json.load(json_file)
@@ -164,28 +164,33 @@ class DictionaryLoaderJson(DictionaryLoader):
             logging.error(error_message)
             return None
 
-        dictionary = Dictionary(json_data['name'])
-        dictionary.native_language = json_data['native_language']
-        dictionary.foreign_language = json_data['foreign_language']
-        dictionary.words.clear()
-        for entry in json_data['words']:
-            dictionary.words.append(DictEntry(entry['word'], entry['translation']))
-        logging.info("Dictionary {} added. Total words {}.".format(
-            dictionary.name, len(dictionary.words)))
+        dictionaries: List[Dictionary] = []
+        for dict_entry in json_data['dictionaries']:
+            dictionary = Dictionary(dict_entry['name'])
+            dictionary.native_language = dict_entry['native_language']
+            dictionary.foreign_language = dict_entry['foreign_language']
+            for word_entry in dict_entry['words']:
+                dictionary.words.append(DictEntry(word_entry['word'], word_entry['translation']))
 
-        return dictionary
+            logging.info("Dictionary {} added. Total words {}.".format(
+                dictionary.name, len(dictionary.words)))
+            dictionaries.append(dictionary)
+
+        return dictionaries
 
     @staticmethod
-    def generate_json_data(dictionary: Dictionary):
-        json_data = {'name': dictionary.name,
-                     'native_language': dictionary.native_language,
-                     'foreign_language': dictionary.foreign_language,
-                     'words': []}
-        for word in dictionary.words:
-            json_data['words'].append({
-                'word': word.word,
-                'translation': word.translation,
-                'learnIndex': word.learnIndex,
-            })
-
+    def generate_json_data(dictionaries: List[Dictionary]):
+        json_data = {'dictionaries': []}
+        for dictionary in dictionaries:
+            dict_json_data = {'name': dictionary.name,
+                         'native_language': dictionary.native_language,
+                         'foreign_language': dictionary.foreign_language,
+                         'words': []}
+            for word in dictionary.words:
+                dict_json_data['words'].append({
+                    'word': word.word,
+                    'translation': word.translation,
+                    'learnIndex': word.learnIndex,
+                })
+            json_data["dictionaries"].append(dict_json_data)
         return json_data

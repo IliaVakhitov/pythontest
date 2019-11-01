@@ -21,6 +21,12 @@ class Model:
         #
         return GameGenerator.generate_game(self.all_words, game_type, words_number)
 
+    def save_dictionaries(self):
+        logging.info("Saving dictionaries.")
+        dictionary_loader_json = DictionaryLoaderJson()
+        dictionary_loader_json.filename = "Dictionaries\\dictionaries.json"
+        dictionary_loader_json.write_dictionaries(self.my_dictionaries)
+
     def load_dictionaries(self):
         logging.info("Loading dictionaries.")
         dictionary_loader_json = DictionaryLoaderJson()
@@ -30,9 +36,9 @@ class Model:
             if file.endswith(".json"):
                 logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
                 dictionary_loader_json.filename = os.path.join("Dictionaries", file)
-                my_dict = dictionary_loader_json.load_dictionary()
-                if my_dict is not None:
-                    self.my_dictionaries.append(my_dict)
+                json_dictionaries = dictionary_loader_json.load_dictionaries()
+                self.my_dictionaries += json_dictionaries
+                for my_dict in json_dictionaries:
                     self.all_words += my_dict.words
 
             if file.endswith(".xls"):
@@ -67,9 +73,11 @@ class Model:
                 "correct" if game_round.is_index_correct(index) else "incorrect"))
             if game_round.is_index_correct(index):
                 correct_answers += 1
+                game_round.dictionary_entry.increase_learn_index()
                 # view.print_str("Correct!")
             else:
                 incorrect_answers += 1
+                game_round.dictionary_entry.decrease_learn_index()
                 # view.print_str("InCorrect!")
         logging.info("Game ended. Correct answers {}. Incorrect answers {}". format(correct_answers, incorrect_answers))
 
@@ -80,14 +88,21 @@ class GameRound:
     Correct answer and correct answer`s index [1-4] for fast check
     """
 
-    def __init__(self, word, translations, correct_answer, correct_index):
-        self.word = word
-        self.translation1 = translations[0]
-        self.translation2 = translations[1]
-        self.translation3 = translations[2]
-        self.translation4 = translations[3]
-        self.correct_answer = correct_answer
-        self.correct_index = correct_index
+    def __init__(self,
+                 dictionary_entry: DictEntry,
+                 word: str,
+                 translations: str,
+                 correct_answer: str,
+                 correct_index: str):
+
+        self.dictionary_entry: DictEntry = dictionary_entry
+        self.word: str = word
+        self.translation1: str = translations[0]
+        self.translation2: str = translations[1]
+        self.translation3: str = translations[2]
+        self.translation4: str = translations[3]
+        self.correct_answer: str = correct_answer
+        self.correct_index: int = correct_index
 
     def is_answer_correct(self, answer) -> bool:
         return answer == self.correct_answer
@@ -173,6 +188,7 @@ class GameGenerator:
             if game_type == GameType.FindTranslation:
                 game_rounds.append(
                     GameRound(
+                        next_word,
                         next_word.word,
                         translations,
                         next_word.translation,
@@ -181,6 +197,7 @@ class GameGenerator:
             elif game_type == GameType.FindWord:
                 game_rounds.append(
                     GameRound(
+                        next_word,
                         next_word.translation,
                         translations,
                         next_word.word,
