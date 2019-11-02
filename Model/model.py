@@ -16,49 +16,23 @@ class Model:
     def __init__(self):
         self.my_dictionaries: List[Dictionary] = []
         self.all_words: List[DictEntry] = []
-
-    def generate_game(self, game_type: GameType, words_number=0):
-        #
-        return GameGenerator.generate_game(self.all_words, game_type, words_number)
+        self.dictionary_handler: DictionariesHandler = DictionariesHandler(self)
 
     def save_dictionaries(self):
-        logging.info("Saving dictionaries.")
-        dictionary_loader_json = DictionaryLoaderJson()
-        dictionary_loader_json.filename = "Dictionaries\\dictionaries.json"
-        dictionary_loader_json.write_dictionaries(self.my_dictionaries)
+        self.dictionary_handler.save_dictionaries()
 
     def load_dictionaries(self):
-        logging.info("Loading dictionaries.")
-        dictionary_loader_json = DictionaryLoaderJson()
-        dictionary_loader_xls = DictionaryLoadedXls()
-        for file in os.listdir("Dictionaries"):
-            # Loading JSON files
-            if file.endswith(".json"):
-                logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
-                dictionary_loader_json.filename = os.path.join("Dictionaries", file)
-                json_dictionaries = dictionary_loader_json.load_dictionaries()
-                self.my_dictionaries += json_dictionaries
-                for my_dict in json_dictionaries:
-                    self.all_words += my_dict.words
+        self.dictionary_handler.load_dictionaries()
 
-            if file.endswith(".xls"):
-                # Loading XLS files
-                logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
-                dictionary_loader_xls.filename = os.path.join("Dictionaries", file)
-                xls_dictionaries = dictionary_loader_xls.load_dictionaries()
-                if xls_dictionaries is not None:
-                    self.my_dictionaries += xls_dictionaries
-                    for my_dict in xls_dictionaries:
-                        self.all_words += my_dict.words
+    def generate_game(self, game_type: GameType, words_number=0):
+        return GameGenerator.generate_game(self.all_words, game_type, words_number)
 
-        logging.info("Total dictionaries loaded {}".format(len(self.my_dictionaries)))
-
-    def print_dictionaries(self):
-        for my_dict in self.my_dictionaries:
-            view.print_str(my_dict.print_information())
+    def reset_progress(self):
+        for word_entry in self.all_words:
+            word_entry.set_learn_index(0)
 
     @staticmethod
-    def play_game(game_rounds) -> None:
+    def play_game(game_rounds, automatic_mode: bool = False) -> None:
         view.print_str("Game starts!")
         view.print_str("Print exit() for exit")
         logging.info("New game started")
@@ -67,7 +41,12 @@ class Model:
         for game_round in game_rounds:
             view.print_str(game_round.print_game_round())
             logging.info("Word {} correct answer {}".format(game_round.word, game_round.correct_index))
-            index = view.input_user_answer("Please, choose correct word:")
+            # Get user input or generate user input
+            if automatic_mode:
+                index = random.randint(1,4)
+            else:
+                index = view.input_user_answer("Please, choose correct word:")
+
             logging.info("User answer {} is {}".format(
                 index,
                 "correct" if game_round.is_index_correct(index) else "incorrect"))
@@ -91,9 +70,9 @@ class GameRound:
     def __init__(self,
                  dictionary_entry: DictEntry,
                  word: str,
-                 translations: str,
+                 translations: List[str],
                  correct_answer: str,
-                 correct_index: str):
+                 correct_index: int):
 
         self.dictionary_entry: DictEntry = dictionary_entry
         self.word: str = word
@@ -125,6 +104,8 @@ class GameRound:
 
 
 class GameGenerator:
+    """ Class is used to generate list of GameRounds
+    """
     @staticmethod
     def mix_list(my_list) -> List:
         list_length = len(my_list)
@@ -138,7 +119,12 @@ class GameGenerator:
         return new_list
 
     @staticmethod
-    def get_random_translation(all_words: List[DictEntry], game_type: GameType, used_value: str, used_values: List[str]) -> str:
+    def get_random_translation(
+            all_words: List[DictEntry],
+            game_type: GameType,
+            used_value: str,
+            used_values: List[str]) -> str:
+
         new_word = all_words[random.randint(0, len(all_words) - 1)]
         if game_type == GameType.FindTranslation:
             while (new_word.translation == used_value) or (new_word.translation in used_values):
@@ -159,8 +145,8 @@ class GameGenerator:
         """
         Generates list of GameRounds
         return
-        None - if no words is dictionaries
-        List of GameRounds:
+            None - if no words is dictionaries
+            List of GameRounds:
         """
         game_rounds: List[GameRound] = []
 
@@ -174,6 +160,7 @@ class GameGenerator:
                 break
             correct_index = random.randint(0, 3)
             translations = []
+            value = ""
             if game_type == GameType.FindTranslation:
                 value = next_word.translation
             elif game_type == GameType.FindWord:
@@ -205,4 +192,51 @@ class GameGenerator:
                     ))
 
         return game_rounds
+
+
+class DictionariesHandler:
+    """ Used to load and save dictionaries from dir \\Dictionaries\\
+        Called from model
+        Saving always in JSON
+        Loading from JSON adn XLS
+    """
+
+    def __init__(self, model: Model) -> None:
+        self.model = model
+
+    def save_dictionaries(self) -> None:
+        logging.info("Saving dictionaries.")
+        dictionary_loader_json = DictionaryLoaderJson()
+        dictionary_loader_json.filename = "Dictionaries\\dictionaries.json"
+        dictionary_loader_json.save_dictionaries(self.model.my_dictionaries)
+
+    def load_dictionaries(self) -> None:
+        logging.info("Loading dictionaries.")
+        dictionary_loader_json = DictionaryLoaderJson()
+        dictionary_loader_xls = DictionaryLoadedXls()
+        for file in os.listdir("Dictionaries"):
+            # Loading JSON files
+            if file.endswith(".json"):
+                logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
+                dictionary_loader_json.filename = os.path.join("Dictionaries", file)
+                json_dictionaries = dictionary_loader_json.load_dictionaries()
+                self.model.my_dictionaries += json_dictionaries
+                for my_dict in json_dictionaries:
+                    self.model.all_words += my_dict.words
+
+            if file.endswith(".xls"):
+                # Loading XLS files
+                logging.info("Start reading file {}".format(os.path.join("Dictionaries", file)))
+                dictionary_loader_xls.filename = os.path.join("Dictionaries", file)
+                xls_dictionaries = dictionary_loader_xls.load_dictionaries()
+                if xls_dictionaries is not None:
+                    self.model.my_dictionaries += xls_dictionaries
+                    for my_dict in xls_dictionaries:
+                        self.model.all_words += my_dict.words
+
+        logging.info("Total dictionaries loaded {}".format(len(self.model.my_dictionaries)))
+
+    def print_dictionaries(self) -> None:
+        for my_dict in self.model.my_dictionaries:
+            view.print_str(my_dict.print_information())
 

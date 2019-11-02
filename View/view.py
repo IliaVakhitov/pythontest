@@ -1,4 +1,5 @@
 import logging
+import re
 
 
 def print_str(message) -> None:
@@ -15,12 +16,9 @@ def input_str(message) -> str:
 
 
 def input_user_answer(message="") -> int:
-    read_str = input_str(message)
-    try:
-        index = int(read_str)
-    except:
-        index = -1
-    if index < 1 or index > 4:
-        input_user_answer("Please, select from 1 to 4!")
 
-    return index
+    while True:
+        user_input = input_str(message)
+        if re.match("[1-4](?!\\d)", user_input):
+            break
+    return int(user_input)

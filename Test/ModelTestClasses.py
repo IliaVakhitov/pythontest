@@ -19,13 +19,23 @@ class ModelTests(unittest.TestCase):
                 new_list = GameGenerator.mix_list(my_list)
                 self.assertEqual(init_length, len(new_list), "Should be equal!")
 
-    def test_random_translation(self):
-        # TODO make up this test
-        model = Model()
-        model.load_dictionaries()
+    def test_automatic_games(self):
+        my_model = Model()
+        my_model.load_dictionaries()
+        for i in range(100):
+            game_rounds = my_model.generate_game(GameType.FindTranslation, 50)
+            if game_rounds is None:
+                exit()
+            my_model.play_game(game_rounds, True)
+
+            game_rounds = my_model.generate_game(GameType.FindWord, 50)
+            if game_rounds is None:
+                exit()
+            my_model.play_game(game_rounds, True)
+
+        my_model.save_dictionaries()
 
     def test_sort_lists(self):
-        model = Model()
         my_list = list(range(500))
         for i in range(100):
             new_list = GameGenerator.mix_list(my_list)

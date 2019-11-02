@@ -7,11 +7,10 @@ import xlrd as xlrd
 
 
 class DictEntry:
-    """
-    Dictionary entry
-        word - word in foreign language ,
-        translation  - in native language
-        learn index - int in range [0,100]
+    """ Dictionary entry
+            word - word in foreign language ,
+            translation  - in native language
+            learn index - int in range [0,100]
     """
 
     def __init__(self, word, translation):
@@ -44,9 +43,7 @@ class DictEntry:
 
 
 class Dictionary:
-    """
-    Class stores DictEntries as a list
-    """
+    """ Class stores DictEntries as a list """
 
     def __init__(self, dict_name) -> None:
         self.name: str = dict_name
@@ -79,8 +76,8 @@ class Dictionary:
 
 
 class DictionaryLoader:
-
-    def write_dictionaries(self, dictionary):
+    # Abstract class to load/save dictionaries
+    def save_dictionaries(self, dictionary):
         pass
 
     def load_dictionaries(self, dictionary):
@@ -88,6 +85,10 @@ class DictionaryLoader:
 
 
 class DictionaryLoadedXls(DictionaryLoader):
+    """ Class to load/save dictionaries from XLS
+        XLS format [Theme, Word, Translation]
+            filename should be given to operate
+    """
     def __init__(self):
         self.filename = ""
 
@@ -127,13 +128,15 @@ class DictionaryLoadedXls(DictionaryLoader):
 
 
 class DictionaryLoaderJson(DictionaryLoader):
-    """
-    Class allows load and save dictionary form/to JSON-file
+    """ Class allows load and save dictionary form/to JSON-file
+        Dictionaries are saved as a list
+        Each dictionary contains it`s fields and a list of the words
+            filename should be given to operate
     """
     def __init__(self):
         self.filename = ""
 
-    def write_dictionaries(self, dictionaries: List[Dictionary]) -> bool:
+    def save_dictionaries(self, dictionaries: List[Dictionary]) -> bool:
         json_data = self.generate_json_data(dictionaries)
         try:
             with codecs.open(self.filename, 'w', "utf-8") as outfile:
