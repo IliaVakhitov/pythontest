@@ -1,5 +1,5 @@
 import unittest
-from Model.model import Model, GameGenerator, GameType
+from Model.Model import Model, GameGenerator, GameType
 
 
 class ModelTests(unittest.TestCase):

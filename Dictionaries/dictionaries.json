@@ -13,7 +13,7 @@
                 {
                     "word": "to push your luck",
                     "translation": "искушать судьбу",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to come up with",
@@ -28,7 +28,7 @@
                 {
                     "word": "to call it a day",
                     "translation": "закончить",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to get over",
@@ -73,12 +73,12 @@
                 {
                     "word": "to speak up",
                     "translation": "говорить громче, высказаться",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to put up with",
                     "translation": "мириться, терпеть",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to grow out of",
@@ -93,7 +93,7 @@
                 {
                     "word": "to mix up",
                     "translation": "путать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to beg a differ",
@@ -108,7 +108,7 @@
                 {
                     "word": "to toss it aside",
                     "translation": "убрать в сторону",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to call something off",
@@ -133,7 +133,7 @@
                 {
                     "word": "to show off",
                     "translation": "выпендриваться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to plead for",
@@ -143,12 +143,12 @@
                 {
                     "word": "to plead to do",
                     "translation": "просить сделать что-то",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to dispose of",
                     "translation": "избавиться от",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to turn something off",
@@ -158,7 +158,7 @@
                 {
                     "word": "to put away",
                     "translation": "откладывать, сохранять",
-                    "learnIndex": 20
+                    "learnIndex": 0
                 },
                 {
                     "word": "to break in on",
@@ -178,7 +178,7 @@
                 {
                     "word": "to take offense",
                     "translation": "обижаться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "take after",
@@ -193,7 +193,7 @@
                 {
                     "word": "to name after",
                     "translation": "назвать в честь",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to get carried away by, with",
@@ -223,7 +223,7 @@
                 {
                     "word": "to hedge one's bets",
                     "translation": "разделять риски",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to keep a diary",
@@ -238,7 +238,7 @@
                 {
                     "word": "to keep a promise",
                     "translation": "сдержать обещание",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to keep an eye on",
@@ -253,7 +253,7 @@
                 {
                     "word": "to act out",
                     "translation": "играть роль",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to stand by",
@@ -288,7 +288,7 @@
                 {
                     "word": "to be tied up",
                     "translation": "задержаться из-за чего-либо",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to pin down",
@@ -310,12 +310,12 @@
                 {
                     "word": "to discover",
                     "translation": "открывать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to steal",
                     "translation": "красть",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a breakthrought",
@@ -325,7 +325,7 @@
                 {
                     "word": "gifted",
                     "translation": "одаренный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to increase",
@@ -370,7 +370,7 @@
                 {
                     "word": "to exceed expectations",
                     "translation": "превосходить ожидания",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to invent",
@@ -385,7 +385,7 @@
                 {
                     "word": "to cause",
                     "translation": "быть причиной",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "imaginary",
@@ -395,7 +395,7 @@
                 {
                     "word": "snowed under (work)",
                     "translation": "заваленный (работой)",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "it is likely to",
@@ -410,7 +410,7 @@
                 {
                     "word": "intellectual property",
                     "translation": "интеллектуальная собственность",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 }
             ]
         },
@@ -437,7 +437,7 @@
                 {
                     "word": "in general",
                     "translation": "в целом",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "acquaintance",
@@ -462,7 +462,7 @@
                 {
                     "word": "special",
                     "translation": "особенный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "inevitable",
@@ -477,7 +477,7 @@
                 {
                     "word": "to make the effort",
                     "translation": "прилагать усилие",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to ask out",
@@ -492,12 +492,12 @@
                 {
                     "word": "to improve",
                     "translation": "улучшать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "annoying",
                     "translation": "раздражающий",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "achievement",
@@ -537,12 +537,12 @@
                 {
                     "word": "appreciation",
                     "translation": "признательность",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to inspire",
                     "translation": "вдохновлять",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "jealousy",
@@ -557,7 +557,7 @@
                 {
                     "word": "gratitude",
                     "translation": "благодарность",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "tacit",
@@ -572,7 +572,7 @@
                 {
                     "word": "to admire",
                     "translation": "восхищаться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "an affinity",
@@ -592,17 +592,17 @@
                 {
                     "word": "to despite",
                     "translation": "сильно не нравится",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to abhor",
                     "translation": "ненавидеть, питать отвращение",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "attractive",
                     "translation": "привлекательный",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "splendid",
@@ -612,12 +612,12 @@
                 {
                     "word": "marvelous",
                     "translation": "дивный, изумительный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "fancinating",
                     "translation": "очаровательный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "stunning",
@@ -627,7 +627,7 @@
                 {
                     "word": "to boast",
                     "translation": "хвастаться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to offend",
@@ -637,7 +637,7 @@
                 {
                     "word": "to absent",
                     "translation": "отсутствовать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to worship",
@@ -672,7 +672,7 @@
                 {
                     "word": "fervently",
                     "translation": "пылко",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a delivery",
@@ -682,12 +682,12 @@
                 {
                     "word": "gracious",
                     "translation": "любезный",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "arrogant",
                     "translation": "надменный, высокомерный",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "gullible",
@@ -697,7 +697,7 @@
                 {
                     "word": "to repulse",
                     "translation": "отталкивать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 }
             ]
         },
@@ -724,7 +724,7 @@
                 {
                     "word": "eventually",
                     "translation": "в конечном счете",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "obvious",
@@ -744,7 +744,7 @@
                 {
                     "word": "extremelly",
                     "translation": "чрезвычайно",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "merits",
@@ -764,7 +764,7 @@
                 {
                     "word": "feature film",
                     "translation": "художественный фильм",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "other",
@@ -784,7 +784,7 @@
                 {
                     "word": "downside",
                     "translation": "недостаток",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "misinterpreted",
@@ -794,12 +794,12 @@
                 {
                     "word": "to have in common",
                     "translation": "иметь общего",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "obsessed with",
                     "translation": "помешанный на",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "subtitles",
@@ -851,17 +851,17 @@
                 {
                     "word": "to rely on",
                     "translation": "положиться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to complete",
                     "translation": "завершать",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to deal with",
                     "translation": "иметь дело с",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "promotion",
@@ -906,7 +906,7 @@
                 {
                     "word": "to employ",
                     "translation": "нанимать на работу",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "department",
@@ -921,7 +921,7 @@
                 {
                     "word": "a benefit",
                     "translation": "преимущество",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to apply for",
@@ -941,12 +941,12 @@
                 {
                     "word": "well-educated",
                     "translation": "хорошо образованный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to work in shifts",
                     "translation": "работать посменно",
-                    "learnIndex": 30
+                    "learnIndex": 0
                 },
                 {
                     "word": "to do for living",
@@ -956,7 +956,7 @@
                 {
                     "word": "matering leave",
                     "translation": "декретный отпуск",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 }
             ]
         },
@@ -968,17 +968,17 @@
                 {
                     "word": "an election",
                     "translation": "выборы",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "a governor",
                     "translation": "губернатор",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "entirely",
                     "translation": "полностью, целиком",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "an obligation",
@@ -1013,22 +1013,22 @@
                 {
                     "word": "illegal",
                     "translation": "незаконный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to commit a crime",
                     "translation": "совершить преступление",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "an offence",
                     "translation": "правонарушение",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to sue someone",
                     "translation": "подать в суд",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to accuse someone of something",
@@ -1063,12 +1063,12 @@
                 {
                     "word": "authorities",
                     "translation": "органы власти",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "harassment",
                     "translation": "ущемление прав, домогательство",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "a deposition",
@@ -1093,7 +1093,7 @@
                 {
                     "word": "a prison",
                     "translation": "тюрьма",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "a fraud",
@@ -1113,7 +1113,7 @@
                 {
                     "word": "a derision",
                     "translation": "осмеяние",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "groundswell",
@@ -1158,12 +1158,12 @@
                 {
                     "word": "to ensure",
                     "translation": "обеспечивать, гарантировать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to plead guilty",
                     "translation": "признать виновным",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to plead no contest",
@@ -1178,12 +1178,12 @@
                 {
                     "word": "violent",
                     "translation": "насильственный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "violent crowd",
                     "translation": "бурная толпа",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "an entity",
@@ -1235,12 +1235,12 @@
                 {
                     "word": "illiterate",
                     "translation": "неграмотный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "competitive",
                     "translation": "конкурентоспособный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "on a regular basis",
@@ -1255,7 +1255,7 @@
                 {
                     "word": "a rehearsal",
                     "translation": "репетиция",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to pray",
@@ -1275,7 +1275,7 @@
                 {
                     "word": "a marble",
                     "translation": "мрамор",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "a sophistication",
@@ -1285,7 +1285,7 @@
                 {
                     "word": "to encompass",
                     "translation": "заключать в себе",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "an abundance",
@@ -1315,7 +1315,7 @@
                 {
                     "word": "to struggle",
                     "translation": "напрягаться",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to pertain",
@@ -1325,12 +1325,12 @@
                 {
                     "word": "doesn't pertain to someone",
                     "translation": "не имеет отношения к",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "to assess",
                     "translation": "оценивать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a manuscript",
@@ -1352,7 +1352,7 @@
                 {
                     "word": "to come in handy",
                     "translation": "пригодиться кстати",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to chase",
@@ -1362,7 +1362,7 @@
                 {
                     "word": "a fortnight",
                     "translation": "две недели",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "hardly",
@@ -1382,7 +1382,7 @@
                 {
                     "word": "annual",
                     "translation": "ежегодный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "awful",
@@ -1407,7 +1407,7 @@
                 {
                     "word": "freezing",
                     "translation": "замораживающий",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "forceful",
@@ -1432,7 +1432,7 @@
                 {
                     "word": "obvious",
                     "translation": "очевидный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "vibrant",
@@ -1442,27 +1442,27 @@
                 {
                     "word": "perplexed",
                     "translation": "ошеломлённый",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "perplexing",
                     "translation": "ошеломляющий,озадачивающий",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "cruel",
                     "translation": "жестокий",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "utterly",
                     "translation": "абсолютно, чрезвычайно",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "exhausting",
                     "translation": "изнурительный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "accustomed to",
@@ -1472,7 +1472,7 @@
                 {
                     "word": "used to",
                     "translation": "привыкнуть к",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "be worth",
@@ -1482,22 +1482,22 @@
                 {
                     "word": "awesome",
                     "translation": "здорово, классно",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to admit",
                     "translation": "принимать, соглашаться, признавать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to regret",
                     "translation": "сожалеть",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "slovenly",
                     "translation": "неопрятный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "kind",
@@ -1522,7 +1522,7 @@
                 {
                     "word": "idiotic",
                     "translation": "дурацкий",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "ecstatic",
@@ -1602,7 +1602,7 @@
                 {
                     "word": "crowded",
                     "translation": "многолюдный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "cherished",
@@ -1622,7 +1622,7 @@
                 {
                     "word": "awkward",
                     "translation": "неловкий, неуклюжий",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "handsome",
@@ -1632,7 +1632,7 @@
                 {
                     "word": "to understimate",
                     "translation": "недооценивать",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "meagre",
@@ -1647,12 +1647,12 @@
                 {
                     "word": "plenty",
                     "translation": "много, достаточно",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "an addictive",
                     "translation": "привыкание",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "collaborative",
@@ -1667,12 +1667,12 @@
                 {
                     "word": "frantically",
                     "translation": "бешено",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to eager",
                     "translation": "стремиться",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to fever",
@@ -1692,7 +1692,7 @@
                 {
                     "word": "a perseverance",
                     "translation": "упорство, настойчивость",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to wean",
@@ -1717,7 +1717,7 @@
                 {
                     "word": "humble",
                     "translation": "скромный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a lack",
@@ -1742,7 +1742,7 @@
                 {
                     "word": "vital",
                     "translation": "жизненно важный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "crucial",
@@ -1757,7 +1757,7 @@
                 {
                     "word": "significant",
                     "translation": "значительный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "central",
@@ -1772,7 +1772,7 @@
                 {
                     "word": "poor",
                     "translation": "плохой",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "unacceptable",
@@ -1807,7 +1807,7 @@
                 {
                     "word": "to embarrass",
                     "translation": "смущать",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "bearble",
@@ -1837,12 +1837,12 @@
                 {
                     "word": "favourable",
                     "translation": "благоприятный",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "timely",
                     "translation": "своевременно",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 }
             ]
         },
@@ -1879,12 +1879,12 @@
                 {
                     "word": "chase rainbows",
                     "translation": "в погоне за радугой",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "storm in a teacup",
                     "translation": "буря в стакане",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "lightning fast",
@@ -1909,27 +1909,27 @@
                 {
                     "word": "cat's pajamas",
                     "translation": "потрясающе",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "don't take any wooden nickels",
                     "translation": "не верить вранью",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "low key",
                     "translation": "втихушку",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "down to the wire",
                     "translation": "в последний момент",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "face the music",
                     "translation": "держать ответ",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "it's raining cats and dogs",
@@ -1939,22 +1939,22 @@
                 {
                     "word": "to break even",
                     "translation": "в ноль, при своих",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "Bob's your uncle!",
                     "translation": "вот и все, проще простого",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "crunch time",
                     "translation": "переломный момент",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to call off the dogs",
                     "translation": "прекращать критикивать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "there is no shortage of something",
@@ -1964,7 +1964,7 @@
                 {
                     "word": "guts",
                     "translation": "мужество, храбрость; внутренности",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "duck soup",
@@ -2004,7 +2004,7 @@
                 {
                     "word": "with flying colors",
                     "translation": "легко и качественно",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to sail under false colors",
@@ -2029,7 +2029,7 @@
                 {
                     "word": "hit the spot",
                     "translation": "быть к месту; попасть в точку",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "in a tight spot",
@@ -2039,12 +2039,12 @@
                 {
                     "word": "to slip one's mind",
                     "translation": "забыть",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "to cross one's mind",
                     "translation": "пытаться вспомнить",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to be double-minded",
@@ -2059,7 +2059,7 @@
                 {
                     "word": "to pay no mind",
                     "translation": "не думать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to speak one's mind",
@@ -2069,7 +2069,7 @@
                 {
                     "word": "to have something in one's mind",
                     "translation": "думать о чем-либо",
-                    "learnIndex": 20
+                    "learnIndex": 0
                 },
                 {
                     "word": "to cut a wide swath",
@@ -2116,7 +2116,7 @@
                 {
                     "word": "to admit",
                     "translation": "признавать",
-                    "learnIndex": 10
+                    "learnIndex": 5
                 },
                 {
                     "word": "to adore",
@@ -2126,7 +2126,7 @@
                 {
                     "word": "to avoid",
                     "translation": "избегать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "can't stand",
@@ -2141,7 +2141,7 @@
                 {
                     "word": "to consider",
                     "translation": "рассматривать, полагать, считать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to delay",
@@ -2161,12 +2161,12 @@
                 {
                     "word": "to enjoy",
                     "translation": "наслаждаться",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to escape",
                     "translation": "ускользать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to fancy",
@@ -2211,7 +2211,7 @@
                 {
                     "word": "to mind",
                     "translation": "возражать",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "to miss",
@@ -2221,7 +2221,7 @@
                 {
                     "word": "to postpone",
                     "translation": "откладывать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to practice",
@@ -2236,12 +2236,12 @@
                 {
                     "word": "to recall",
                     "translation": "вспоминать",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "to resent",
                     "translation": "негодавать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to resist",
@@ -2251,12 +2251,12 @@
                 {
                     "word": "to risk",
                     "translation": "рисковать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to suggest",
                     "translation": "предлагать, советовать",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to tolerate",
@@ -2271,7 +2271,7 @@
                 {
                     "word": "can't bear",
                     "translation": "не терпеть, не нравится",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 }
             ]
         },
@@ -2283,22 +2283,22 @@
                 {
                     "word": "to afford",
                     "translation": "позволять себе",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to agree",
                     "translation": "соглашаться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to aim",
                     "translation": "стремиться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to arrange",
                     "translation": "договариваться, организовывать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to attempt",
@@ -2313,7 +2313,7 @@
                 {
                     "word": "to decide",
                     "translation": "решать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to deserve",
@@ -2328,7 +2328,7 @@
                 {
                     "word": "to fail",
                     "translation": "потерпеть неудачу",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to guarantee",
@@ -2343,7 +2343,7 @@
                 {
                     "word": "to learn",
                     "translation": "учиться",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to manage",
@@ -2353,12 +2353,12 @@
                 {
                     "word": "to offer",
                     "translation": "предлагать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to plan",
                     "translation": "планировать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to prepare",
@@ -2393,7 +2393,7 @@
                 {
                     "word": "to threaten",
                     "translation": "угрожать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to turn out",
@@ -2408,7 +2408,7 @@
                 {
                     "word": "to undertake",
                     "translation": "брать ответственность",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to yearn",
@@ -2462,12 +2462,12 @@
                 {
                     "word": "to deliver",
                     "translation": "доставлять",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to swallow",
                     "translation": "глотать",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "unanimous",
@@ -2477,7 +2477,7 @@
                 {
                     "word": "threatening",
                     "translation": "угрожающий",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to dare",
@@ -2497,17 +2497,17 @@
                 {
                     "word": "stubborn",
                     "translation": "упрямый",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "an appeal",
                     "translation": "привлекательность",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a mob",
                     "translation": "толпа",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "impertinent",
@@ -2517,7 +2517,7 @@
                 {
                     "word": "pertinent",
                     "translation": "уместный, подходящий",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "to claim",
@@ -2547,7 +2547,7 @@
                 {
                     "word": "a swarm",
                     "translation": "рой; толпа",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to complain",
@@ -2562,7 +2562,7 @@
                 {
                     "word": "a scar",
                     "translation": "шрам",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "a trunk",
@@ -2587,7 +2587,7 @@
                 {
                     "word": "a bush",
                     "translation": "куст",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "a bosom buddy",
@@ -2602,7 +2602,7 @@
                 {
                     "word": "to precipitate",
                     "translation": "быть причиной события",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to give rise to",
@@ -2622,7 +2622,7 @@
                 {
                     "word": "a hedge",
                     "translation": "живая изгородь",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a tile",
@@ -2637,7 +2637,7 @@
                 {
                     "word": "to impose",
                     "translation": "навязывать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a freckle",
@@ -2652,22 +2652,22 @@
                 {
                     "word": "a thicket",
                     "translation": "заросли, дебри",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to inflict",
                     "translation": "ударить, причинить боль",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a swath",
                     "translation": "полоса скошенной травы",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to persuade",
                     "translation": "уговаривать",
-                    "learnIndex": 0
+                    "learnIndex": 5
                 },
                 {
                     "word": "to induce",
@@ -2677,7 +2677,7 @@
                 {
                     "word": "a germ",
                     "translation": "микроб",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to possess",
@@ -2692,12 +2692,12 @@
                 {
                     "word": "to embody",
                     "translation": "воплощать, олицетворять",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to swerve",
                     "translation": "сворачивать, отклоняться",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to swap",
@@ -2712,7 +2712,7 @@
                 {
                     "word": "a hike",
                     "translation": "поход",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to skid",
@@ -2754,7 +2754,7 @@
                 {
                     "word": "a bend",
                     "translation": "изгиб",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to bound",
@@ -2764,12 +2764,12 @@
                 {
                     "word": "bound up with",
                     "translation": "тесно связан",
-                    "learnIndex": 25
+                    "learnIndex": 0
                 },
                 {
                     "word": "a frustration",
                     "translation": "разочарование",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "a clutch",
@@ -2779,7 +2779,7 @@
                 {
                     "word": "unanticipated",
                     "translation": "непредвиденный",
-                    "learnIndex": 15
+                    "learnIndex": 0
                 },
                 {
                     "word": "peculiar",
@@ -2804,7 +2804,7 @@
                 {
                     "word": "to astonish",
                     "translation": "удивлять, изумлять",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 }
             ]
         },
@@ -2821,12 +2821,12 @@
                 {
                     "word": "a fly on the wall",
                     "translation": "пассивный наблюдатель ситуации",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to raise a flap",
                     "translation": "выразить несогласие",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "to bite my tongue",
@@ -2836,12 +2836,12 @@
                 {
                     "word": "to bite the hand that feeds you",
                     "translation": "кусать кормящую руку",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to be as brown as berry",
                     "translation": "сильно загореть",
-                    "learnIndex": 20
+                    "learnIndex": 0
                 },
                 {
                     "word": "to pass the buck",
@@ -2851,7 +2851,7 @@
                 {
                     "word": "hooked on something",
                     "translation": "\"подсесть\" на что-то",
-                    "learnIndex": 10
+                    "learnIndex": 0
                 },
                 {
                     "word": "with bells and whistles",
@@ -2908,7 +2908,7 @@
                 {
                     "word": "to think ahead",
                     "translation": "обдумывать заранее",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 },
                 {
                     "word": "to map out",
@@ -2918,7 +2918,7 @@
                 {
                     "word": "to crop up",
                     "translation": "неожиданно возникать",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 }
             ]
         },
@@ -2940,7 +2940,7 @@
                 {
                     "word": "twist of fate",
                     "translation": "непредвиденный, неизбежный",
-                    "learnIndex": 5
+                    "learnIndex": 0
                 }
             ]
         }
