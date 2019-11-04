@@ -13,24 +13,24 @@ class DictEntry:
             learn index - int in range [0,100]
     """
 
-    def __init__(self, word, translation):
+    def __init__(self, word: str, translation: str, learning_index: int) -> None:
         self.word = word
         self.translation = translation
-        self.learnIndex = 0
+        self.learning_index = learning_index if learning_index > 0 else 0
 
     def set_learn_index(self, value) -> None:
         if value < 0:
-            self.learnIndex = 0
+            self.learning_index = 0
         elif value >= 100:
-            self.learnIndex = 100
+            self.learning_index = 100
         else:
-            self.learnIndex = value
+            self.learning_index = value
 
     def increase_learn_index(self) -> None:
-        self.learnIndex += (5 if self.learnIndex < 100 else 0)
+        self.learning_index += (5 if self.learning_index < 100 else 0)
 
     def decrease_learn_index(self) -> None:
-        self.learnIndex -= (5 if self.learnIndex > 0 else 0)
+        self.learning_index -= (5 if self.learning_index > 0 else 0)
 
     def set_word(self, value) -> None:
         self.word = value
@@ -39,7 +39,7 @@ class DictEntry:
         self.translation = value
 
     def print_entry(self) -> str:
-        return "{} - {} : {}".format(self.word, self.translation, self.learnIndex)
+        return "{} - {} : {}".format(self.word, self.translation, self.learning_index)
 
 
 class Dictionary:
@@ -77,10 +77,10 @@ class Dictionary:
 
 class DictionaryLoader:
     # Abstract class to load/save dictionaries
-    def save_dictionaries(self, dictionary):
+    def save_dictionaries(self, dictionaries: List[Dictionary]):
         pass
 
-    def load_dictionaries(self, dictionary):
+    def load_dictionaries(self):
         pass
 
 
@@ -173,7 +173,7 @@ class DictionaryLoaderJson(DictionaryLoader):
             dictionary.native_language = dict_entry['native_language']
             dictionary.foreign_language = dict_entry['foreign_language']
             for word_entry in dict_entry['words']:
-                dictionary.words.append(DictEntry(word_entry['word'], word_entry['translation']))
+                dictionary.words.append(DictEntry(word_entry['word'], word_entry['translation'], word_entry['learnIndex']))
 
             logging.info("Dictionary {} added. Total words {}.".format(
                 dictionary.name, len(dictionary.words)))
@@ -193,7 +193,7 @@ class DictionaryLoaderJson(DictionaryLoader):
                 dict_json_data['words'].append({
                     'word': word.word,
                     'translation': word.translation,
-                    'learnIndex': word.learnIndex,
+                    'learnIndex': word.learning_index,
                 })
             json_data["dictionaries"].append(dict_json_data)
         return json_data

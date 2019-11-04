@@ -11,7 +11,8 @@ logging.basicConfig(level=logging.INFO,
 
 ModelSQL.initialisation()
 
-""" my_model = Model()
+""" 
+my_model = Model()
 my_model.load_dictionaries()
 
 for i in range(1):
