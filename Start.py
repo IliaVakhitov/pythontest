@@ -1,6 +1,8 @@
 import logging.handlers
-from Model.Model import Model, GameType
+from Model.Model import Model
+from Model.GameType import GameType
 
+from Model.HandlerSQL import HandlerSQL
 from Model.ModelSQL import ModelSQL
 
 logging.basicConfig(level=logging.INFO,
@@ -9,23 +11,8 @@ logging.basicConfig(level=logging.INFO,
                     format='%(levelname)s %(asctime)s - %(message)s')
 
 
-ModelSQL.initialisation()
+HandlerSQL.initialisation()
 
-""" 
-my_model = Model()
-my_model.load_dictionaries()
-
-for i in range(1):
-    game_rounds = my_model.generate_game(GameType.FindTranslation, 50)
-    if game_rounds is None:
-        exit()
-    my_model.play_game(game_rounds, True)
-
-    game_rounds = my_model.generate_game(GameType.FindWord, 50)
-    if game_rounds is None:
-        exit()
-    my_model.play_game(game_rounds, True)
-
-my_model.save_dictionaries()
-"""
-
+model_sql = ModelSQL()
+game = model_sql.generate_game(GameType.FindTranslation, 15, [])
+print(game)

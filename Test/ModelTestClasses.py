@@ -1,5 +1,7 @@
 import unittest
-from Model.Model import Model, GameGenerator, GameType
+from Model.Model import Model
+from Model.GameGenerator import GameGenerator
+from Model.GameType import GameType
 
 
 class ModelTests(unittest.TestCase):
@@ -28,7 +30,7 @@ class ModelTests(unittest.TestCase):
                 exit()
             my_model.play_game(game_rounds, True)
 
-            game_rounds = my_model.generate_game(GameType.FindWord, 50)
+            game_rounds = my_model.generate_game(GameType.FindSpelling, 50)
             if game_rounds is None:
                 exit()
             my_model.play_game(game_rounds, True)

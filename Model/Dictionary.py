@@ -13,8 +13,8 @@ class DictEntry:
             learn index - int in range [0,100]
     """
 
-    def __init__(self, word: str, translation: str, learning_index: int) -> None:
-        self.word = word
+    def __init__(self, spelling: str, translation: str, learning_index: int) -> None:
+        self.spelling = spelling
         self.translation = translation
         self.learning_index = learning_index if learning_index > 0 else 0
 
@@ -33,13 +33,13 @@ class DictEntry:
         self.learning_index -= (5 if self.learning_index > 0 else 0)
 
     def set_word(self, value) -> None:
-        self.word = value
+        self.spelling = value
 
     def set_translation(self, value) -> None:
         self.translation = value
 
     def print_entry(self) -> str:
-        return "{} - {} : {}".format(self.word, self.translation, self.learning_index)
+        return "{} - {} : {}".format(self.spelling, self.translation, self.learning_index)
 
 
 class Dictionary:
@@ -91,6 +91,9 @@ class DictionaryLoadedXls(DictionaryLoader):
     """
     def __init__(self):
         self.filename = ""
+
+    def save_dictionaries(self, dictionaries: List[Dictionary]):
+        super().save_dictionaries(dictionaries)
 
     def load_dictionaries(self):
         dictionaries: List[Dictionary] = []
@@ -191,7 +194,7 @@ class DictionaryLoaderJson(DictionaryLoader):
                          'words': []}
             for word in dictionary.words:
                 dict_json_data['words'].append({
-                    'word': word.word,
+                    'word': word.spelling,
                     'translation': word.translation,
                     'learnIndex': word.learning_index,
                 })
