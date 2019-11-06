@@ -1,7 +1,7 @@
-import logging.handlers
+import logging
 import mysql.connector
 from typing import Dict, Optional, Tuple
-from Model.Model import Model
+from Model.ModelConsole import Model, ModelConsole
 
 
 class HandlerSQL:
@@ -36,9 +36,9 @@ class HandlerSQL:
             logging.error("Could insert values. {}".format(err.msg))
             exit(1)
 
-        model = Model()
+        model = ModelConsole()
         model.load_dictionaries()
-        model.reset_progress()
+        model.reset_progress(model.words)
 
         query_insert_dictionary = """
             INSERT IGNORE INTO dictionaries (

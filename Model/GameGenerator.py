@@ -1,6 +1,5 @@
 import random
 from typing import List, Optional
-
 from Model.Dictionary import DictEntry
 from Model.GameRound import GameRound
 from Model.GameType import GameType

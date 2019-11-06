@@ -1,5 +1,5 @@
 import unittest
-from Model.Model import Model
+from Model.ModelConsole import Model
 from Model.GameGenerator import GameGenerator
 from Model.GameType import GameType
 
@@ -35,7 +35,7 @@ class ModelTests(unittest.TestCase):
                 exit()
             my_model.play_game(game_rounds, True)
 
-        my_model.save_dictionaries()
+        my_model.save_state()
 
     def test_sort_lists(self):
         my_list = list(range(500))
