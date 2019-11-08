@@ -26,7 +26,10 @@ class Model(ABC):
         pass
 
     @abstractmethod
-    def generate_game(self, game_type: GameType, words_number=0) -> Optional[List[GameRound]]:
+    def generate_game(self,
+                      game_type: GameType,
+                      words_number: int = 0,
+                      dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
         pass
 
     def reset_progress(self, words):
@@ -37,7 +40,12 @@ class Model(ABC):
         for dictionary in dictionaries:
             view.print_str(dictionary.print_information())
 
-    def play_game(self, game_rounds: List[GameRound], automatic_mode: bool = False) -> None:
+    @staticmethod
+    def play_game(game_rounds: Optional[List[GameRound]], automatic_mode: bool = False) -> None:
+        if game_rounds is None:
+            logging.info("No game rounds! Game is over!")
+            print("Game over!")
+            return None
         view.print_str("Game starts!")
         view.print_str("Print exit() for exit")
         logging.info("New game started")

@@ -50,7 +50,10 @@ class ModelConsole(Model):
 
         logging.info("Total dictionaries loaded {}".format(len(self.dictionaries)))
 
-    def generate_game(self, game_type: GameType, words_number=0) -> Optional[List[GameRound]]:
+    def generate_game(self,
+                      game_type: GameType,
+                      words_number: int = 0,
+                      dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
         return GameGenerator.generate_game(self.words, game_type, words_number)
 
     def reset_progress(self, words):

@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 from Model.Dictionary import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
@@ -29,7 +29,11 @@ class ModelSQL(Model):
     def print_dictionaries(self, dictionaries) -> None:
         super().print_dictionaries(dictionaries)
 
-    def generate_game(self, game_type: GameType, words_number=0) -> Optional[List[GameRound]]:
+    def generate_game(self,
+                      game_type: GameType,
+                      word_limit: int = 0,
+                      dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+
         words_query = """
         SELECT 
             spelling, 
@@ -37,15 +41,30 @@ class ModelSQL(Model):
             learning_index
         FROM
             words
+        """
+        dictionary_condition = """
         WHERE
-            learning_index = %s
+            dictionary in (%s)
+        """
+        if dictionaries is not None and len(dictionaries) > 0:
+            in_condition = ','.join(['%s'] * len(dictionaries))
+            words_query += dictionary_condition % in_condition
+        words_query += """
         ORDER BY 
-            learning_index DESC
+            RAND()
+        """
+        limit_condition = """
         LIMIT %s;
         """
+        if word_limit != 0:
+            words_query += limit_condition
+
         cursor = HandlerSQL.database.cursor()
-        values:Tuple = (0,words_number)
-        if not HandlerSQL.select_query(cursor, words_query, values):
+
+        args: List = list(dictionaries)
+        args.append(word_limit)
+
+        if not HandlerSQL.select_query(cursor, words_query, args):
             print("Error in Select query")
             return None
         words_list: List[DictEntry] = []

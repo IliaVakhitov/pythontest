@@ -1,4 +1,6 @@
 import logging.handlers
+from typing import List, Tuple
+
 from Model.ModelConsole import Model
 from Model.GameType import GameType
 from Model.HandlerSQL import HandlerSQL
@@ -13,5 +15,8 @@ logging.basicConfig(level=logging.INFO,
 HandlerSQL.initialisation()
 
 model_sql = ModelSQL()
-game = model_sql.generate_game(GameType.FindTranslation, 5, [])
-Model.play_game(game, False)
+dictionaries = list()
+dictionaries.append('Idioms')
+dictionaries.append('Everyday')
+game = model_sql.generate_game(GameType.FindTranslation, 5, dictionaries)
+Model.play_game(game, True)
