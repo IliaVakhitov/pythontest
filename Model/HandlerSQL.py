@@ -1,6 +1,6 @@
 import logging
 import mysql.connector
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, List
 from Model.ModelConsole import Model, ModelConsole
 
 
@@ -76,7 +76,8 @@ class HandlerSQL:
         HandlerSQL.database.commit()
 
     @staticmethod
-    def select_query(cursor, query: str, values: Dict) -> bool:
+    def select_query(cursor, query: str, values: List) -> bool:
+
         try:
             cursor.execute(query, values)
         except mysql.connector.Error as err:
@@ -85,7 +86,18 @@ class HandlerSQL:
         return True
 
     @staticmethod
+    def select_unconditional_query(cursor, query: str) -> bool:
+
+        try:
+            cursor.execute(query)
+        except mysql.connector.Error as err:
+            logging.error("Could not select values. {}".format(err.msg))
+            return False
+        return True
+
+    @staticmethod
     def insert_query(cursor, query, values) -> bool:
+
         try:
             cursor.execute(query, values)
         except mysql.connector.Error as err:
@@ -95,6 +107,7 @@ class HandlerSQL:
 
     @staticmethod
     def check_sql() -> bool:
+
         try:
             cursor = HandlerSQL.database.cursor()
             cursor.execute("SHOW TABLES")
@@ -107,6 +120,7 @@ class HandlerSQL:
 
     @staticmethod
     def sql_connection() -> bool:
+
         logging.info("Connecting to MySQL")
         try:
             HandlerSQL.database = mysql.connector.connect(
@@ -123,6 +137,7 @@ class HandlerSQL:
 
     @staticmethod
     def check_create_database() -> bool:
+
         # Check if DB exist and create
         logging.info("Connecting to SQL database 'DictionariesDB'")
         try:
@@ -141,6 +156,7 @@ class HandlerSQL:
 
     @staticmethod
     def close_connection() -> bool:
+
         logging.info("Closing SQL connection")
         try:
             HandlerSQL.database.close()
@@ -151,6 +167,7 @@ class HandlerSQL:
 
     @staticmethod
     def drop_tables() -> None:
+
         logging.info("Dropping SQL tables")
         try:
             cursor = HandlerSQL.database.cursor()
@@ -163,6 +180,7 @@ class HandlerSQL:
 
     @staticmethod
     def drop_db() -> bool:
+
         logging.info("Dropping database")
         try:
             cursor = HandlerSQL.database.cursor()
@@ -174,6 +192,7 @@ class HandlerSQL:
 
     @staticmethod
     def initialise_tables_list() -> bool:
+
         sql_tables: Dict[str, str] = {}
         sql_tables['languages'] = ("""
             CREATE TABLE 
@@ -216,6 +235,7 @@ class HandlerSQL:
     # Creating tables
     @staticmethod
     def check_create_table(table_name, table_description) -> bool:
+
         logging.info("Checking table {}".format(table_name))
         try:
             cursor = HandlerSQL.database.cursor()

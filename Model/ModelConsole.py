@@ -9,22 +9,27 @@ from typing import List, Optional
 
 
 class ModelConsole(Model):
+
     """ Class uses to play console game.
     Two types of games are available
     Words number can be defined
     Always all dictionaries are used
     """
+
     def __init__(self):
+
         self.dictionaries: List[Dictionary] = []
         self.words: List[DictEntry] = []
 
     def save_state(self):
+
         logging.info("Saving dictionaries.")
         dictionary_loader_json = DictionaryLoaderJson()
         dictionary_loader_json.filename = "Dictionaries\\dictionaries.json"
         dictionary_loader_json.save_dictionaries(self.dictionaries)
 
     def load_dictionaries(self):
+
         logging.info("Loading dictionaries.")
         dictionary_loader_json = DictionaryLoaderJson()
         dictionary_loader_xls = DictionaryLoadedXls()
@@ -57,12 +62,15 @@ class ModelConsole(Model):
         return GameGenerator.generate_game(self.words, game_type, words_number)
 
     def reset_progress(self, words):
+
         super().reset_progress(words)
 
     def print_dictionaries(self,  dictionaries: List[Dictionary]) -> None:
+
         super().print_dictionaries(dictionaries)
 
     def play_game(self, game_rounds: List[GameRound], automatic_mode: bool = False) -> None:
+
         super().play_game(game_rounds, automatic_mode)
 
 

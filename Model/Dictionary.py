@@ -14,11 +14,13 @@ class DictEntry:
     """
 
     def __init__(self, spelling: str, translation: str, learning_index: int) -> None:
+
         self.spelling = spelling
         self.translation = translation
         self.learning_index = learning_index if learning_index > 0 else 0
 
     def set_learn_index(self, value) -> None:
+
         if value < 0:
             self.learning_index = 0
         elif value >= 100:
@@ -27,18 +29,23 @@ class DictEntry:
             self.learning_index = value
 
     def increase_learn_index(self) -> None:
+
         self.learning_index += (5 if self.learning_index < 100 else 0)
 
     def decrease_learn_index(self) -> None:
+
         self.learning_index -= (5 if self.learning_index > 0 else 0)
 
     def set_word(self, value) -> None:
+
         self.spelling = value
 
     def set_translation(self, value) -> None:
+
         self.translation = value
 
     def print_entry(self) -> str:
+
         return "{} - {} : {}".format(self.spelling, self.translation, self.learning_index)
 
 
@@ -46,21 +53,25 @@ class Dictionary:
     """ Class stores DictEntries as a list """
 
     def __init__(self, dict_name) -> None:
+
         self.name: str = dict_name
         self.words: List[DictEntry] = []  # DictEntry
         self.native_language: str = ""
         self.foreign_language: str = ""
 
     def add_new_entry(self, word, translation) -> None:
-        self.words.append(DictEntry(word, translation))
+
+        self.words.append(DictEntry(word, translation, 0))
 
     def print_information(self) -> str:
+
         res = self.name + "\n"
         res += "Languages: {} - {} \n".format(self.native_language, self.foreign_language)
         res += self.print_words()
         return res
 
     def print_words(self) -> str:
+
         res = ""
         for word in self.words:
             res = res + word.print_entry()
@@ -69,13 +80,16 @@ class Dictionary:
         return res
 
     def add_dict_entry(self, dict_entry) -> None:
+
         self.words.append(dict_entry)
 
     def remove_dict_entry(self, dict_entry) -> None:
+
         self.words.remove(dict_entry)
 
 
 class DictionaryLoader:
+
     # Abstract class to load/save dictionaries
     def save_dictionaries(self, dictionaries: List[Dictionary]):
         pass
@@ -85,17 +99,21 @@ class DictionaryLoader:
 
 
 class DictionaryLoadedXls(DictionaryLoader):
+
     """ Class to load/save dictionaries from XLS
         XLS format [Theme, Word, Translation]
             filename should be given to operate
     """
+
     def __init__(self):
         self.filename = ""
 
     def save_dictionaries(self, dictionaries: List[Dictionary]):
+
         super().save_dictionaries(dictionaries)
 
     def load_dictionaries(self):
+
         dictionaries: List[Dictionary] = []
         try:
             workbook = xlrd.open_workbook(self.filename)
@@ -103,6 +121,7 @@ class DictionaryLoadedXls(DictionaryLoader):
         except IOError:
             logging.error("Error loading xls file {}".format(self.filename))
             return None
+
         current_dictionary_name = ""
         current_dictionary = Dictionary("")
         current_dictionary.native_language = "Russian"
@@ -131,11 +150,13 @@ class DictionaryLoadedXls(DictionaryLoader):
 
 
 class DictionaryLoaderJson(DictionaryLoader):
+
     """ Class allows load and save dictionary form/to JSON-file
         Dictionaries are saved as a list
         Each dictionary contains it`s fields and a list of the words
             filename should be given to operate
     """
+
     def __init__(self):
         self.filename = ""
 
@@ -151,6 +172,7 @@ class DictionaryLoaderJson(DictionaryLoader):
         return True
 
     def load_dictionaries(self):
+
         try:
             with codecs.open(self.filename, 'r', "utf-8") as json_file:
                 json_data = json.load(json_file)
@@ -186,6 +208,7 @@ class DictionaryLoaderJson(DictionaryLoader):
 
     @staticmethod
     def generate_json_data(dictionaries: List[Dictionary]):
+
         json_data = {'dictionaries': []}
         for dictionary in dictionaries:
             dict_json_data = {'name': dictionary.name,

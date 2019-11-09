@@ -1,3 +1,4 @@
+import logging
 import random
 from typing import List, Optional
 from Model.Dictionary import DictEntry
@@ -6,10 +7,13 @@ from Model.GameType import GameType
 
 
 class GameGenerator:
+
     """ Class is used to generate list of GameRounds
     """
+
     @staticmethod
     def mix_list(item_list) -> List:
+
         list_length = len(item_list)
         tmp_list = item_list.copy()
         new_list = []
@@ -44,16 +48,24 @@ class GameGenerator:
 
     @staticmethod
     def generate_game(words_list: List[DictEntry], game_type: GameType, words_number=0) -> Optional[List[GameRound]]:
-        """ Generates list of GameRounds
+
+        """
+        Generates list of GameRounds
+        Does not make sense if words_number < 4. Return None in this case
         return
-            None - if no words is dictionaries
+            None - if no words is dictionaries or words less than 4
             List of GameRounds:
         """
-        game_rounds: List[GameRound] = []
-
         if len(words_list) == 0:
             # No words in dictionaries
+            logging.info("No words in dictionaries!")
             return None
+
+        if len(words_list) < 4:
+            logging.info("Not enough words to generate game!")
+            return None
+
+        game_rounds: List[GameRound] = []
 
         all_words = GameGenerator.mix_list(words_list)
         for next_word in all_words:
