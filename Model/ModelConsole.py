@@ -16,12 +16,17 @@ class ModelConsole(Model):
     Always all dictionaries are used
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         self.dictionaries: List[Dictionary] = []
         self.words: List[DictEntry] = []
 
-    def save_state(self):
+    def save_state(self) -> None:
+
+        """
+        Saves dictionaries in JSON file
+        :return: None
+        """
 
         logging.info("Saving dictionaries.")
         dictionary_loader_json = DictionaryLoaderJson()
@@ -59,6 +64,7 @@ class ModelConsole(Model):
                       game_type: GameType,
                       words_number: int = 0,
                       dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+
         return GameGenerator.generate_game(self.words, game_type, words_number)
 
     def reset_progress(self, words):

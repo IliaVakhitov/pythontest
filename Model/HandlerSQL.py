@@ -122,6 +122,7 @@ class HandlerSQL:
     def sql_connection() -> bool:
 
         logging.info("Connecting to MySQL")
+
         try:
             HandlerSQL.database = mysql.connector.connect(
                 host="localhost",
@@ -232,7 +233,7 @@ class HandlerSQL:
                 return False
         return True
 
-    # Creating tables
+    # Create table
     @staticmethod
     def check_create_table(table_name, table_description) -> bool:
 

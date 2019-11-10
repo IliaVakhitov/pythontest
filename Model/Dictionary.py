@@ -7,6 +7,7 @@ import xlrd as xlrd
 
 
 class DictEntry:
+
     """ Dictionary entry
             word - word in foreign language ,
             translation  - in native language
@@ -50,7 +51,10 @@ class DictEntry:
 
 
 class Dictionary:
-    """ Class stores DictEntries as a list """
+
+    """
+    Class stores DictEntries as a list
+    """
 
     def __init__(self, dict_name) -> None:
 
@@ -90,7 +94,10 @@ class Dictionary:
 
 class DictionaryLoader:
 
-    # Abstract class to load/save dictionaries
+    """
+    Abstract class to load/save dictionaries
+    """
+
     def save_dictionaries(self, dictionaries: List[Dictionary]):
         pass
 
@@ -100,9 +107,10 @@ class DictionaryLoader:
 
 class DictionaryLoadedXls(DictionaryLoader):
 
-    """ Class to load/save dictionaries from XLS
-        XLS format [Theme, Word, Translation]
-            filename should be given to operate
+    """
+    Class to load/save dictionaries from XLS
+    XLS format [Theme, Word, Translation]
+    filename should be given to operate
     """
 
     def __init__(self):
@@ -151,10 +159,11 @@ class DictionaryLoadedXls(DictionaryLoader):
 
 class DictionaryLoaderJson(DictionaryLoader):
 
-    """ Class allows load and save dictionary form/to JSON-file
-        Dictionaries are saved as a list
-        Each dictionary contains it`s fields and a list of the words
-            filename should be given to operate
+    """
+    Class allows load and save dictionary form/to JSON-file
+    Dictionaries are saved as a list
+    Each dictionary contains it`s fields and a list of the words
+        filename should be given to operate
     """
 
     def __init__(self):

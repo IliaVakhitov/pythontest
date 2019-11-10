@@ -56,7 +56,6 @@ class GameGeneratorTests(unittest.TestCase):
             # Assert
             self.assertIsNone(game, "No game if words less than 4!")
 
-
     def test_sort_lists(self):
 
         # Arrange
@@ -69,7 +68,6 @@ class GameGeneratorTests(unittest.TestCase):
 
             # Assert
             self.assertEqual(my_list, new_list, "List should be equal after mixing!")
-
 
     def test_sort_length(self):
 

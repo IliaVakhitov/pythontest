@@ -32,38 +32,61 @@ class ModelSQL(Model):
     def print_dictionaries(self, dictionaries) -> None:
         super().print_dictionaries(dictionaries)
 
-    def generate_game(self,
-                      game_type: GameType,
-                      word_limit: int = 0,
-                      dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+    def generate_game(
+            self,
+            game_type: GameType,
+            word_limit: int = 0,
+            dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+
+        """
+        Generates list of game rounds with query to SQL database.
+        Query used to get list of DictEntries.
+        Than game generated with GameGenerator class.
+        :param game_type: enum game type
+        :param word_limit: 0 or higher than 4. 4 - minimum for a game
+        :param dictionaries: list of str with names of dictionaries
+        :return:
+            None - could not generate game
+            List of game rounds
+        """
         # Logs
         logging.info("Generating game.")
+        if 0 < word_limit < 4:
+            logging.info("Not enough words to generate game!")
+            return None
+
         logging.info("Game type {}".format(game_type))
         logging.info("Word_limit {}".format(word_limit))
         logging.info("Dictionaries {}".format(dictionaries))
 
         words_query = """
-        SELECT 
-            spelling, 
-            translation,
-            learning_index
-        FROM
-            words
-        """
+            SELECT 
+                spelling, 
+                translation,
+                learning_index
+            FROM
+                words
+            """
+        # Condition is used if param dictionaries if defined
         dictionary_condition = """
-        WHERE
-            dictionary in (%s)
-        """
+            WHERE
+                dictionary in (%s)
+            """
+
         if dictionaries is not None and len(dictionaries) > 0:
             in_condition = ','.join(['%s'] * len(dictionaries))
             words_query += dictionary_condition % in_condition
+
         words_query += """
-        ORDER BY 
-            RAND()
-        """
+            ORDER BY 
+                RAND()
+            """
+        # Condition is used if param word_limit if defined
         limit_condition = """
-        LIMIT %s;
-        """
+            LIMIT %s;
+            """
+
+        # Generating list of parameters for cursor query
         args: List = list()
         if dictionaries is not None and len(dictionaries) > 0:
             args = list(dictionaries)
@@ -80,7 +103,9 @@ class ModelSQL(Model):
         words_list: List[DictEntry] = []
         for entry in cursor:
             words_list.append(DictEntry(entry[0], entry[1], entry[2]))
+
         logging.info("Total game rounds {}".format(len(words_list)))
+
         return GameGenerator.generate_game(words_list, game_type)
 
     def play_game(self, game_rounds: List[GameRound], automatic_mode: bool = False) -> None:
