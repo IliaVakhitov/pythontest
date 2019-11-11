@@ -19,7 +19,7 @@ class Model(ABC):
     """
 
     @abstractmethod
-    def save_state(self):
+    def save_state(self, game_rounds: List[GameRound]):
         pass
 
     @abstractmethod

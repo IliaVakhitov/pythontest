@@ -14,11 +14,12 @@ class DictEntry:
             learn index - int in range [0,100]
     """
 
-    def __init__(self, spelling: str, translation: str, learning_index: int) -> None:
+    def __init__(self, spelling: str, translation: str, learning_index: int, sql_id: int = 0) -> None:
 
         self.spelling = spelling
         self.translation = translation
         self.learning_index = learning_index if learning_index > 0 else 0
+        self.sql_id = sql_id
 
     def set_learn_index(self, value) -> None:
 

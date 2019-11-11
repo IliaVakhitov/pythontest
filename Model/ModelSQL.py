@@ -10,7 +10,8 @@ from Model.Model import Model
 
 class ModelSQL(Model):
 
-    """ Uses SQL as database
+    """
+    Uses SQL as database
     Different options to generate games
         Amount of words
         Less knows words
@@ -20,8 +21,42 @@ class ModelSQL(Model):
     def __init__(self) -> None:
         HandlerSQL.initialisation()
 
-    def save_state(self):
-        pass
+    def save_state(self, game_rounds: Optional[List[GameRound]]) -> bool:
+
+        """
+        Making UPDATE request into database to update learning index
+        :return:
+            True - updated successful
+            False - entries did not updated
+        """
+        if game_rounds is None:
+            return False
+
+        update_query = """
+            UPDATE 
+                words
+            SET 
+                learning_index = %(learning_index)s
+            WHERE 
+                id = %(id)s;
+            """
+        # Log
+        logging.info("Updating learning_index in database")
+        for game_round in game_rounds:
+            logging.info("ID {}, word {}, new learning_index {}".format(
+                game_round.dictionary_entry.sql_id,
+                game_round.dictionary_entry.spelling,
+                game_round.dictionary_entry.learning_index
+            ))
+            args = {
+                'learning_index': game_round.dictionary_entry.learning_index,
+                'id': game_round.dictionary_entry.sql_id}
+
+            result = HandlerSQL.update_query(update_query, args)
+            if not result:
+                return False
+
+        return HandlerSQL.commit()
 
     def load_dictionaries(self):
         pass
@@ -60,7 +95,8 @@ class ModelSQL(Model):
         logging.info("Dictionaries {}".format(dictionaries))
 
         words_query = """
-            SELECT 
+            SELECT
+                id, 
                 spelling, 
                 translation,
                 learning_index
@@ -102,7 +138,7 @@ class ModelSQL(Model):
 
         words_list: List[DictEntry] = []
         for entry in cursor:
-            words_list.append(DictEntry(entry[0], entry[1], entry[2]))
+            words_list.append(DictEntry(entry[1], entry[2], entry[3], entry[0]))
 
         logging.info("Total game rounds {}".format(len(words_list)))
 

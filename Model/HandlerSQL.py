@@ -73,7 +73,7 @@ class HandlerSQL:
                                next_word.learning_index)
                 HandlerSQL.insert_query(cursor, query_insert_word, word_values)
 
-        HandlerSQL.database.commit()
+        HandlerSQL.commit()
 
     @staticmethod
     def select_query(cursor, query: str, values: List) -> bool:
@@ -102,6 +102,17 @@ class HandlerSQL:
             cursor.execute(query, values)
         except mysql.connector.Error as err:
             logging.error("Could not insert values. {}".format(err.msg))
+            return False
+        return True
+
+    @staticmethod
+    def update_query(query, values) -> bool:
+
+        try:
+            cursor = HandlerSQL.database.cursor()
+            cursor.execute(query, values)
+        except mysql.connector.Error as err:
+            logging.error("Could not update values. {}".format(err.msg))
             return False
         return True
 
@@ -250,4 +261,14 @@ class HandlerSQL:
         except mysql.connector.Error as err:
             logging.error("Could not create table. {}".format(err.msg))
             return False
+        return True
+
+    @staticmethod
+    def commit() -> bool:
+        try:
+            HandlerSQL.database.commit()
+        except mysql.connector.Error as err:
+            logging.error("Could not commit database. {}".format(err.msg))
+            return False
+
         return True

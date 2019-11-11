@@ -11,8 +11,10 @@ logging.basicConfig(level=logging.INFO,
 
 model_sql = ModelSQL()
 
-game = model_sql.generate_game(GameType.FindTranslation, 3)
+game = model_sql.generate_game(GameType.FindTranslation, 500)
 
-model_sql.play_game(game)
+model_sql.play_game(game, True)
+
+model_sql.save_state(game)
 
 

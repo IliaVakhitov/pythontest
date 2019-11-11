@@ -21,7 +21,7 @@ class ModelConsole(Model):
         self.dictionaries: List[Dictionary] = []
         self.words: List[DictEntry] = []
 
-    def save_state(self) -> None:
+    def save_state(self, game_rounds: List[GameRound]) -> None:
 
         """
         Saves dictionaries in JSON file
