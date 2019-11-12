@@ -121,7 +121,8 @@ class GameGenerator:
                         next_word.spelling,
                         translations,
                         next_word.translation,
-                        correct_index + 1
+                        correct_index + 1,
+                        next_word.learning_index
                     ))
             elif game_type == GameType.FindSpelling:
                 game_rounds.append(
@@ -130,7 +131,8 @@ class GameGenerator:
                         next_word.translation,
                         translations,
                         next_word.spelling,
-                        correct_index + 1
+                        correct_index + 1,
+                        next_word.learning_index
                     ))
 
         return game_rounds

@@ -43,13 +43,15 @@ class ModelSQL(Model):
         # Log
         logging.info("Updating learning_index in database")
         for game_round in game_rounds:
+            if not game_round.learning_index_changed:
+                continue
             logging.info("ID {}, word {}, new learning_index {}".format(
                 game_round.dictionary_entry.sql_id,
                 game_round.dictionary_entry.spelling,
-                game_round.dictionary_entry.learning_index
+                game_round.new_learning_index
             ))
             args = {
-                'learning_index': game_round.dictionary_entry.learning_index,
+                'learning_index': game_round.new_learning_index,
                 'id': game_round.dictionary_entry.sql_id}
 
             result = HandlerSQL.update_query(update_query, args)

@@ -137,8 +137,8 @@ class HandlerSQL:
         try:
             HandlerSQL.database = mysql.connector.connect(
                 host="localhost",
-                user="test_user",
-                passwd="Developer"
+                user="testuser",
+                passwd="Develop_1"
             )
         except mysql.connector.Error as err:
             logging.error("Could not connect to MySQL. {}".format(err.msg))

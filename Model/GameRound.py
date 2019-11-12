@@ -14,7 +14,8 @@ class GameRound:
                  word: str,
                  translations: List[str],
                  correct_answer: str,
-                 correct_index: int):
+                 correct_index: int,
+                 learning_index: int):
 
         self.dictionary_entry: DictEntry = dictionary_entry
         self.word: str = word
@@ -23,7 +24,10 @@ class GameRound:
         self.translation3: str = translations[2]
         self.translation4: str = translations[3]
         self.correct_answer: str = correct_answer
-        self.correct_index: int = correct_index
+        self.correct_index: str = correct_index
+        self.learning_index: int = learning_index
+        self.new_learning_index: int = learning_index
+        self.learning_index_changed: bool = False
 
     def is_answer_correct(self, answer) -> bool:
         return answer == self.correct_answer

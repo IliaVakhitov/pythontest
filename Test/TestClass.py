@@ -9,36 +9,44 @@ from Model.ModelSQL import ModelSQL
 
 class ModelTests(unittest.TestCase):
 
+    def __init__(self, *args, **kwargs):
+
+        super(ModelTests, self).__init__(*args, **kwargs)
+        self.initialise_dictionaries()
+
+    def initialise_dictionaries(self):
+
+        self.model = ModelConsole()
+        self.model.load_dictionaries()
+
     def test_game_generation(self):
 
         # Arrange
-        model = ModelConsole()
-        model.load_dictionaries()
+        # in initialisation
 
         for i in range(100):
             # Act
-            game_rounds = model.generate_game(GameType.FindTranslation, i+1)
+            game_rounds = self.model.generate_game(GameType.FindTranslation, i+1)
             # Assert
             self.assertEqual(i+1, len(game_rounds), "Rounds in game should be equal!")
 
     def test_automatic_games(self):
 
         # Arrange
-        my_model = ModelConsole()
-        my_model.load_dictionaries()
+        # in initialisation
 
         # Act
         result = True
         for i in range(100):
-            game_rounds = my_model.generate_game(GameType.FindTranslation, 50)
+            game_rounds = self.model.generate_game(GameType.FindTranslation, 50)
             if game_rounds is None:
                 result = False
-            my_model.play_game(game_rounds, True)
+            self.model.play_game(game_rounds, True)
 
-            game_rounds = my_model.generate_game(GameType.FindSpelling, 50)
+            game_rounds = self.model.generate_game(GameType.FindSpelling, 50)
             if game_rounds is None:
                 result = False
-            my_model.play_game(game_rounds, True)
+            self.model.play_game(game_rounds, True)
 
         # Assert
         self.assertEqual(result, True, "Automatic games did not work!")
