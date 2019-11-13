@@ -14,7 +14,7 @@ logging.basicConfig(
 
 # HandlerSQL.database_creation()
 
-
+# added comment to check git working
 model_sql = ModelSQL()
 
 game = model_sql.generate_game(GameType.FindSpelling, 50)
