@@ -157,7 +157,7 @@ class HandlerSQL:
             cursor.execute("SHOW DATABASES LIKE 'DictionariesDB';")
             db_exist = cursor.fetchone()
             if db_exist is None:
-                cursor.execute("CREATE DATABASE DictionariesDB;")
+                cursor.execute("CREATE DATABASE DictionariesDB character set utf8;")
             cursor.execute("USE DictionariesDB;")
         except mysql.connector.Error as err:
             logging.error("Could not create database. {}".format(err.msg))

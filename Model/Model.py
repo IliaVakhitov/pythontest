@@ -77,7 +77,9 @@ class Model(ABC):
             if not automatic_mode:
                 view.print_str(game_round.print_game_round())
 
-            logging.info("Word \'{}\' correct answer \'{}\'".format(game_round.word, game_round.correct_index))
+            logging.info("Word \'{}\'".format(game_round.word))
+            logging.info("\tCorrect answer \'{}\'".format(game_round.correct_answer))
+            logging.info("\tCorrect index \'{}\'".format(game_round.correct_index))
             # Get user input or generate user input
             if automatic_mode:
                 index = random.randint(1, 4)
