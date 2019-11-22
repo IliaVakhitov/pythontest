@@ -1,31 +1,52 @@
 import logging
 import mysql.connector
-from typing import Dict, Optional, Tuple, List
-from Model.ModelConsole import Model, ModelConsole
+from typing import Optional, Dict, List
+from Model.ModelConsole import ModelConsole
 
 
 class HandlerSQL:
-    database = None
 
-    @staticmethod
-    def initialisation() -> bool:
-        result = HandlerSQL.sql_connection()
-        result = result and HandlerSQL.check_create_database()
+    def __init__(self) -> None:
+        self.database = self.sql_connection()
+        self.connected = self.database is not None
+        self.connected = self.connected and self.check_create_database()
+
+    def sql_connection(self):
+
+        logging.info("Connecting to SQL")
+
+        try:
+            database = mysql.connector.connect(
+                host="localhost",
+                user="testuser",
+                passwd="Develop_1"
+            )
+        except mysql.connector.Error as err:
+            logging.error("Could not connect to SQL. {}".format(err.msg))
+            return None
+
+        logging.info("Connected to SQL successfully.")
+        return database
+
+    def close_connection(self, ) -> bool:
+
+        logging.info("Closing SQL connection")
+        try:
+            self.database.close()
+        except mysql.connector.Error as err:
+            logging.error("Could not close sql connection. {}".format(err.msg))
+            return False
+        return True
+
+    def database_creation(self) -> bool:
+        result = self.drop_db()
+        result = result and self.check_create_database()
+        result = result and self.initialise_tables_list()
+        result = result and self.populate_from_json()
         return result
-        # HandlerSQL.check_sql()
 
-    @staticmethod
-    def database_creation() -> bool:
-        result = HandlerSQL.sql_connection()
-        result = result and HandlerSQL.drop_db()
-        result = result and HandlerSQL.check_create_database()
-        result = result and HandlerSQL.initialise_tables_list()
-        result = result and HandlerSQL.populate_from_json()
-        return result
-
-    @staticmethod
-    def populate_from_json() -> None:
-        cursor = HandlerSQL.database.cursor()
+    def populate_from_json(self) -> None:
+        cursor = self.database.cursor()
         query = """
             INSERT IGNORE INTO languages                 
                 (language_name) 
@@ -65,18 +86,17 @@ class HandlerSQL:
             dictionary_values = (next_dictionary.name,
                                  next_dictionary.native_language,
                                  next_dictionary.foreign_language)
-            HandlerSQL.insert_query(cursor, query_insert_dictionary, dictionary_values)
+            self.insert_query(cursor, query_insert_dictionary, dictionary_values)
             for next_word in next_dictionary.words:
                 word_values = (next_dictionary.name,
                                next_word.spelling,
                                next_word.translation,
                                next_word.learning_index)
-                HandlerSQL.insert_query(cursor, query_insert_word, word_values)
+                self.insert_query(cursor, query_insert_word, word_values)
 
-        HandlerSQL.commit()
+        self.commit()
 
-    @staticmethod
-    def select_query(cursor, query: str, values: List) -> bool:
+    def select_query(self, cursor, query: str, values: List) -> bool:
 
         try:
             cursor.execute(query, values)
@@ -85,8 +105,7 @@ class HandlerSQL:
             return False
         return True
 
-    @staticmethod
-    def select_unconditional_query(cursor, query: str) -> bool:
+    def select_unconditional_query(self, cursor, query: str) -> bool:
 
         try:
             cursor.execute(query)
@@ -95,8 +114,7 @@ class HandlerSQL:
             return False
         return True
 
-    @staticmethod
-    def insert_query(cursor, query, values) -> bool:
+    def insert_query(self, cursor, query, values) -> bool:
 
         try:
             cursor.execute(query, values)
@@ -105,55 +123,34 @@ class HandlerSQL:
             return False
         return True
 
-    @staticmethod
-    def update_query(query, values) -> bool:
+    def update_query(self, query, values) -> bool:
 
         try:
-            cursor = HandlerSQL.database.cursor()
+            cursor = self.database.cursor()
             cursor.execute(query, values)
         except mysql.connector.Error as err:
             logging.error("Could not update values. {}".format(err.msg))
             return False
         return True
 
-    @staticmethod
-    def check_sql() -> bool:
+    def check_sql(self, ) -> bool:
 
         try:
-            cursor = HandlerSQL.database.cursor()
+            cursor = self.database.cursor()
             cursor.execute("SHOW TABLES")
             for x in cursor:
                 print(x)
         except mysql.connector.Error as err:
-            logging.error("Could check MySQL. {}".format(err.msg))
+            logging.error("Could check SQL. {}".format(err.msg))
             return False
         return True
 
-    @staticmethod
-    def sql_connection() -> bool:
-
-        logging.info("Connecting to MySQL")
-
-        try:
-            HandlerSQL.database = mysql.connector.connect(
-                host="localhost",
-                user="testuser",
-                passwd="Develop_1"
-            )
-        except mysql.connector.Error as err:
-            logging.error("Could not connect to MySQL. {}".format(err.msg))
-            return False
-
-        logging.info("Connected to MySQL successfully.")
-        return True
-
-    @staticmethod
-    def check_create_database() -> bool:
+    def check_create_database(self) -> bool:
 
         # Check if DB exist and create
         logging.info("Connecting to SQL database 'DictionariesDB'")
         try:
-            cursor = HandlerSQL.database.cursor()
+            cursor = self.database.cursor()
             cursor.execute("SHOW DATABASES LIKE 'DictionariesDB';")
             db_exist = cursor.fetchone()
             if db_exist is None:
@@ -166,23 +163,11 @@ class HandlerSQL:
         logging.info("Connected to database successfully.")
         return True
 
-    @staticmethod
-    def close_connection() -> bool:
-
-        logging.info("Closing SQL connection")
-        try:
-            HandlerSQL.database.close()
-        except mysql.connector.Error as err:
-            logging.error("Could not close sql connection. {}".format(err.msg))
-            return False
-        return True
-
-    @staticmethod
-    def drop_tables() -> None:
+    def drop_tables(self, ) -> None:
 
         logging.info("Dropping SQL tables")
         try:
-            cursor = HandlerSQL.database.cursor()
+            cursor = self.database.cursor()
             cursor.execute("DROP TABLE IF EXISTS words;")
             cursor.execute("DROP TABLE IF EXISTS dictionaries;")
             cursor.execute("DROP TABLE IF EXISTS languages;")
@@ -190,20 +175,18 @@ class HandlerSQL:
             logging.error("Could not drop table. {}".format(err.msg))
             exit(1)
 
-    @staticmethod
-    def drop_db() -> bool:
+    def drop_db(self, ) -> bool:
 
         logging.info("Dropping database")
         try:
-            cursor = HandlerSQL.database.cursor()
+            cursor = self.database.cursor()
             cursor.execute("DROP DATABASE IF EXISTS DictionariesDB;")
         except mysql.connector.Error as err:
             logging.error("Could not database. {}".format(err.msg))
             return False
         return True
 
-    @staticmethod
-    def initialise_tables_list() -> bool:
+    def initialise_tables_list(self, ) -> bool:
 
         sql_tables: Dict[str, str] = {}
         sql_tables['languages'] = ("""
@@ -211,8 +194,7 @@ class HandlerSQL:
                `languages` (
                    `language_name` varchar(25) NOT NULL PRIMARY KEY
                 );
-            """
-        )
+            """)
 
         sql_tables['dictionaries'] = ("""
             CREATE TABLE 
@@ -223,8 +205,7 @@ class HandlerSQL:
                    FOREIGN KEY (`native_language`) REFERENCES `languages`(`language_name`), 
                    FOREIGN KEY (`foreign_language`) REFERENCES `languages`(`language_name`) 
                );
-            """
-        )
+            """)
 
         sql_tables['words'] = ("""
             CREATE TABLE 
@@ -236,21 +217,19 @@ class HandlerSQL:
                    `learning_index` INT(3) NOT NULL, 
                    FOREIGN KEY (`dictionary`) REFERENCES `dictionaries`(`dictionary_name`) 
                );
-            """
-        )
+            """)
 
         for table_name, table_description in sql_tables.items():
-            if not HandlerSQL.check_create_table(table_name, table_description):
+            if not self.check_create_table(table_name, table_description):
                 return False
         return True
 
     # Create table
-    @staticmethod
-    def check_create_table(table_name, table_description) -> bool:
+    def check_create_table(self, table_name, table_description) -> bool:
 
         logging.info("Checking table {}".format(table_name))
         try:
-            cursor = HandlerSQL.database.cursor()
+            cursor = self.database.cursor()
             query = "SHOW TABLES LIKE '{}';".format(table_name)
             cursor.execute(query)
             table_exist = cursor.fetchone()
@@ -263,10 +242,9 @@ class HandlerSQL:
             return False
         return True
 
-    @staticmethod
-    def commit() -> bool:
+    def commit(self) -> bool:
         try:
-            HandlerSQL.database.commit()
+            self.database.commit()
         except mysql.connector.Error as err:
             logging.error("Could not commit database. {}".format(err.msg))
             return False

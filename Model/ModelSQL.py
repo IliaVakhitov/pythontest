@@ -5,6 +5,7 @@ import logging
 from Model.Dictionary import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
+from Model.HandlerPostgreSQL import HandlerPostgreSQL
 from Model.HandlerSQL import HandlerSQL
 from Model.GameType import GameType
 from Model.Model import Model
@@ -21,7 +22,7 @@ class ModelSQL(Model):
     """
 
     def __init__(self) -> None:
-        HandlerSQL.initialisation()
+        self.handler_sql = HandlerSQL()
 
     def save_state(self, game_rounds: Optional[List[GameRound]]) -> bool:
 
@@ -56,11 +57,11 @@ class ModelSQL(Model):
                 'learning_index': game_round.new_learning_index,
                 'id': game_round.dictionary_entry.sql_id}
 
-            result = HandlerSQL.update_query(update_query, args)
+            result = self.handler_sql.update_query(update_query, args)
             if not result:
                 return False
 
-        return HandlerSQL.commit()
+        return self.handler_sql.commit()
 
     def load_dictionaries(self):
         pass
@@ -134,8 +135,8 @@ class ModelSQL(Model):
             words_query += limit_condition
             args.append(word_limit)
 
-        cursor = HandlerSQL.database.cursor()
-        if not HandlerSQL.select_query(cursor, words_query, args):
+        cursor = self.handler_sql.database.cursor()
+        if not self.handler_sql.select_query(cursor, words_query, args):
             print("Error in Select query.")
             logging.error("Error in Select query.")
             return None

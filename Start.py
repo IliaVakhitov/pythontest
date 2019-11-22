@@ -11,10 +11,6 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-
-# HandlerSQL.database_creation()
-
-# added comment to check git working
 model_sql = ModelSQL()
 
 game = model_sql.generate_game(GameType.FindSpelling, 50)
@@ -25,8 +21,7 @@ game = model_sql.generate_game(GameType.FindTranslation, 50)
 model_sql.play_game(game, True)
 model_sql.save_state(game)
 
-"""
+
 model = ModelConsole()
 model.load_dictionaries()
 
-"""

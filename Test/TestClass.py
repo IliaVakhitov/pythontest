@@ -94,11 +94,14 @@ class GameGeneratorTests(unittest.TestCase):
 class ModelSQLTests(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
+
         super(ModelSQLTests, self).__init__(*args, **kwargs)
         self.initialise_sql()
 
     def initialise_sql(self):
+
         self.model_sql = ModelSQL()
+        self.handler_sql = HandlerSQL()
         total_words_query = """
         SELECT 
             COUNT(spelling)
@@ -106,8 +109,8 @@ class ModelSQLTests(unittest.TestCase):
             words
         """
 
-        cursor = HandlerSQL.database.cursor()
-        if not HandlerSQL.select_unconditional_query(cursor, total_words_query):
+        cursor = self.handler_sql.database.cursor()
+        if not self.handler_sql.select_unconditional_query(cursor, total_words_query):
             self.fail("Could not get total words in dictionaries!")
 
         self.total_words = cursor.fetchone()[0]
