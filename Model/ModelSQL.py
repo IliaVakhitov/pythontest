@@ -47,7 +47,7 @@ class ModelSQL(Model):
         for game_round in game_rounds:
             if not game_round.learning_index_changed:
                 continue
-            logging.info("ID {}, word {}, new learning_index {}".format(
+            logging.info("ID \'{}\', word \'{}\', new learning_index \'{}\'".format(
                 game_round.dictionary_entry.sql_id,
                 game_round.dictionary_entry.spelling,
                 game_round.new_learning_index
