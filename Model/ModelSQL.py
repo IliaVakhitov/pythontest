@@ -22,7 +22,8 @@ class ModelSQL(Model):
     """
 
     def __init__(self) -> None:
-        self.handler_sql = HandlerSQL()
+        # self.handler_sql = HandlerSQL()
+        self.handler_sql = HandlerPostgreSQL()
 
     def save_state(self, game_rounds: Optional[List[GameRound]]) -> bool:
 
