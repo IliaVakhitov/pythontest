@@ -2,7 +2,7 @@ import logging
 from abc import ABC, abstractmethod
 
 import mysql.connector
-from typing import Optional, Dict, List
+from typing import List
 from Model.ModelConsole import ModelConsole
 
 

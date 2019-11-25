@@ -3,7 +3,6 @@ import mysql.connector
 from typing import Optional, Dict, List
 
 from Model.HandlerSQL import HandlerSQL
-from Model.ModelConsole import ModelConsole
 
 
 class HandlerMySQL(HandlerSQL):

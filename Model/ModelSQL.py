@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from typing import List, Optional
 import logging
 from Model.Dictionary import DictEntry

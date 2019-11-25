@@ -1,5 +1,4 @@
 from typing import List
-
 from Model.Dictionary import DictEntry
 
 

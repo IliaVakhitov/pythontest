@@ -1,0 +1,6 @@
+# pythontestproject
+mysql==0.0.2
+mysql-connector-python==8.0.18
+psycopg2==2.8.4
+pycrypto==2.6.1
+xlrd==1.2.0

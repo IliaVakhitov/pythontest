@@ -59,19 +59,6 @@ class HandlerPostgreSQL(HandlerSQL):
             return False
         return True
 
-    def drop_tables(self) -> bool:
-        logging.info("Dropping SQL tables")
-        try:
-            cursor = self.database.cursor()
-            cursor.execute("DROP TABLE IF EXISTS words;")
-            cursor.execute("DROP TABLE IF EXISTS dictionaries;")
-            cursor.execute("DROP TABLE IF EXISTS languages;")
-        except psycopg2.Error as err:
-            logging.error(f"Could not drop table. {format(err.msg)}")
-            return False
-        logging.info("SQL tables dropped successful")
-        return True
-
     def sql_connection(self):
 
         logging.info("Connecting to PostgreSQL")
@@ -122,7 +109,8 @@ class HandlerPostgreSQL(HandlerSQL):
         return True
 
     def database_creation(self) -> bool:
-        result = self.initialise_tables_list()
+        result = self.drop_db()
+        result = result and self.initialise_tables_list()
         result = result and self.populate_from_json()
         return result
 
@@ -198,6 +186,19 @@ class HandlerPostgreSQL(HandlerSQL):
 
     def drop_db(self) -> bool:
         return self.drop_tables()
+
+    def drop_tables(self) -> bool:
+        logging.info("Dropping SQL tables")
+        try:
+            cursor = self.database.cursor()
+            cursor.execute("DROP TABLE IF EXISTS words;")
+            cursor.execute("DROP TABLE IF EXISTS dictionaries;")
+            cursor.execute("DROP TABLE IF EXISTS languages;")
+        except psycopg2.Error as err:
+            logging.error(f"Could not drop table. {format(err.msg)}")
+            return False
+        logging.info("SQL tables dropped successful")
+        return True
 
     def commit(self) -> bool:
         try:
