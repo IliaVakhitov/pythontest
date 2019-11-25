@@ -102,7 +102,7 @@ class HandlerMySQL(HandlerSQL):
         except mysql.connector.Error as err:
             logging.error("Could not create database. {}".format(err.msg))
             return False
-
+        cursor.execute("USE DictionariesDB;")
         logging.info("Connected to database successfully.")
         return True
 
