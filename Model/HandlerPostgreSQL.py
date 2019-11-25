@@ -4,13 +4,13 @@ from typing import List, Dict
 from Model.HandlerSQL import HandlerSQL
 import psycopg2
 
+from Model.ModelConsole import ModelConsole
+
 
 class HandlerPostgreSQL(HandlerSQL):
 
     def __init__(self) -> None:
-        self.database = self.sql_connection()
-        self.connected = self.database is not None
-        self.connected = self.connected and self.check_sql()
+        super().__init__()
 
     def close_connection(self) -> bool:
         logging.info("Closing SQL connection")
@@ -23,16 +23,41 @@ class HandlerPostgreSQL(HandlerSQL):
         return True
 
     def select_query(self, cursor, query: str, values: List) -> bool:
-        pass
+
+        try:
+            cursor.execute(query, values)
+        except psycopg2.Error as err:
+            logging.error("Could not select values. {}".format(err))
+            return False
+        return True
 
     def select_unconditional_query(self, cursor, query: str) -> bool:
-        pass
+
+        try:
+            cursor.execute(query)
+        except psycopg2.Error as err:
+            logging.error("Could not select values. {}".format(err))
+            return False
+        return True
 
     def insert_query(self, cursor, query, values) -> bool:
-        pass
+
+        try:
+            cursor.execute(query, values)
+        except psycopg2.Error as err:
+            logging.error("Could not insert values. {}".format(err))
+            return False
+        return True
 
     def update_query(self, query, values) -> bool:
-        pass
+
+        try:
+            cursor = self.database.cursor()
+            cursor.execute(query, values)
+        except psycopg2.Error as err:
+            logging.error("Could not update values. {}".format(err))
+            return False
+        return True
 
     def drop_tables(self) -> bool:
         logging.info("Dropping SQL tables")
@@ -56,7 +81,7 @@ class HandlerPostgreSQL(HandlerSQL):
                 host="localhost",
                 user="testuser",
                 password="Develop_1",
-                database="DictionariesDB"
+                database="postgres"
             )
             database.autocommit = True
         except psycopg2.Error as err:
@@ -67,23 +92,15 @@ class HandlerPostgreSQL(HandlerSQL):
 
         return database
 
-    def check_sql(self) -> bool:
-
-        logging.info("Checking database")
-        try:
-            cursor = self.database.cursor()
-            cursor.execute("SELECT datname FROM pg_database Where datname = \'DictionariesDB\'")
-            for x in cursor:
-                logging.info(x)
-        except psycopg2.Error as err:
-            logging.error("Could not check SQL. {}".format(err))
-            return False
-
-        return True
-
     def check_create_database(self) -> bool:
+        """
+        Check if DB exist
+        If not create DB, tables and fill dada from JSON
+        :return:
+            True - created successful
+            False - error in creating db
+        """
 
-        # Check if DB exist and create
         logging.info("Connecting to SQL database 'DictionariesDB'")
         try:
             cursor = self.database.cursor()
@@ -95,7 +112,7 @@ class HandlerPostgreSQL(HandlerSQL):
                         ENCODING 'UTF8';
                     """
                 cursor.execute(query_create)
-                self.commit()
+                self.database_creation()
 
         except psycopg2.Error as err:
             logging.error("Could not create database. {}".format(err))
@@ -105,9 +122,7 @@ class HandlerPostgreSQL(HandlerSQL):
         return True
 
     def database_creation(self) -> bool:
-        result = self.drop_db()
-        result = result and self.check_create_database()
-        result = result and self.initialise_tables_list()
+        result = self.initialise_tables_list()
         result = result and self.populate_from_json()
         return result
 
@@ -138,7 +153,7 @@ class HandlerPostgreSQL(HandlerSQL):
         sql_tables['words'] = ("""
                     CREATE TABLE 
                        \"words\" (
-                           \"id\" SMALLINT NOT NULL  PRIMARY KEY, 
+                           \"id\" SMALLSERIAL NOT NULL  PRIMARY KEY, 
                            \"dictionary\" VARCHAR(50) NOT NULL, 
                            \"spelling\" VARCHAR(255) NOT NULL, 
                            \"translation\" VARCHAR(255) NOT NULL, 
@@ -149,14 +164,14 @@ class HandlerPostgreSQL(HandlerSQL):
 
         for table_name, table_description in sql_tables.items():
             if not self.check_create_table(table_name, table_description):
-                logging.error(f"Could not create table {table_name}")
+                logging.error(f"Could not create table \'{table_name}\'")
                 return False
 
         return True
 
     def check_create_table(self, table_name, table_description) -> bool:
 
-        logging.info(f"Checking table {format(table_name)}")
+        logging.info(f"Checking table \'{format(table_name)}\'")
         try:
             cursor = self.database.cursor()
             query = """
@@ -172,11 +187,11 @@ class HandlerPostgreSQL(HandlerSQL):
             table_exist = cursor.fetchone()
             if table_exist[0] is False:
                 cursor.execute(table_description)
-                logging.info(f"Table {table_name} created")
+                logging.info(f"Table \'{table_name}\' created")
             else:
-                logging.info("Table {} already exist".format(table_name))
+                logging.info(f"Table \'{table_name}\' already exist")
         except psycopg2.Error as err:
-            logging.error(f"Could not create table. {err}")
+            logging.error(f"Could not create table \'{table_name}\' {err}")
             return False
 
         return True

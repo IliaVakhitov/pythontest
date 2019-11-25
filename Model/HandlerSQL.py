@@ -8,6 +8,11 @@ from Model.ModelConsole import ModelConsole
 
 class HandlerSQL(ABC):
 
+    def __init__(self) -> None:
+        self.database = self.sql_connection()
+        self.connected = self.database is not None
+        self.connected = self.connected and self.check_create_database()
+
     @abstractmethod
     def sql_connection(self):
         pass
@@ -34,10 +39,6 @@ class HandlerSQL(ABC):
 
     @abstractmethod
     def update_query(self, query, values) -> bool:
-        pass
-
-    @abstractmethod
-    def check_sql(self) -> bool:
         pass
 
     @abstractmethod
@@ -75,7 +76,7 @@ class HandlerSQL(ABC):
         try:
             cursor.execute(query)
         except mysql.connector.Error as err:
-            logging.error("Could insert values. {}".format(err.msg))
+            logging.error(f"Could insert values. {err.msg}")
             return False
 
         model = ModelConsole()

@@ -1,10 +1,13 @@
 import unittest
 
+from Model.HandlerMySQL import HandlerMySQL
+from Model.HandlerPostgreSQL import HandlerPostgreSQL
 from Model.HandlerSQL import HandlerSQL
 from Model.ModelConsole import ModelConsole
 from Model.GameType import GameType
 from Model.GameGenerator import GameGenerator
 from Model.ModelSQL import ModelSQL
+from Model.SQLType import SQLType
 
 
 class ModelTests(unittest.TestCase):
@@ -91,17 +94,83 @@ class GameGeneratorTests(unittest.TestCase):
                 self.assertEqual(init_length, len(new_list), "Should be equal after mixing!")
 
 
-class ModelSQLTests(unittest.TestCase):
+class ModelSQLCases:
 
-    def __init__(self, *args, **kwargs):
+    class ModelSQLTests(unittest.TestCase):
 
-        super(ModelSQLTests, self).__init__(*args, **kwargs)
-        self.initialise_sql()
+        def __init__(self, *args, **kwargs):
+
+            super(ModelSQLCases.ModelSQLTests, self).__init__(*args, **kwargs)
+            self.initialise_sql()
+
+        def initialise_sql(self):
+
+            self.model_sql = ModelSQL(SQLType.MySQL)
+            total_words_query = """
+            SELECT 
+                COUNT(spelling)
+            FROM
+                words
+            """
+
+            cursor = self.model_sql.handler_sql.database.cursor()
+            if not self.model_sql.handler_sql.select_unconditional_query(cursor, total_words_query):
+                self.fail("Could not get total words in dictionaries!")
+
+            self.total_words = cursor.fetchone()[0]
+
+        def test_sql_game_all_words(self):
+
+            # Arrange
+
+            # Act
+            game = self.model_sql.generate_game(GameType.FindTranslation)
+
+            # Assert
+            self.assertEqual(len(game), self.total_words, "Number of game rounds should be equal!")
+
+            # Act
+            game = self.model_sql.generate_game(GameType.FindSpelling)
+
+            # Assert
+            self.assertEqual(len(game), self.total_words, "Number of game rounds should be equal!")
+
+        def test_sql_game_words_number(self):
+
+            # Arrange
+            for i in range(10, self.total_words):
+                # Act
+                game = self.model_sql.generate_game(GameType.FindTranslation, i)
+
+                # Assert
+                self.assertEqual(len(game), i, "Number of game rounds should be defined!")
+
+                # Act
+                game = self.model_sql.generate_game(GameType.FindSpelling, i)
+
+                # Assert
+                self.assertEqual(len(game), i, "Number of game rounds should be defined!")
+
+        def test_sql_game_dictionaries(self):
+
+            # Arrange
+            dictionaries = list()
+            dictionaries.append('Idioms')
+            dictionaries.append('Everyday')
+            words_number = 50
+
+            # Act
+            game = self.model_sql.generate_game(GameType.FindTranslation, words_number, dictionaries)
+
+            # Assert
+            self.assertEqual(len(game), words_number, "Number of game rounds should be defined!")
+
+
+class ModelPostgreSQLTests(ModelSQLCases.ModelSQLTests):
 
     def initialise_sql(self):
 
-        self.model_sql = ModelSQL()
-        self.handler_sql = HandlerSQL()
+        self.model_sql = ModelSQL(SQLType.PostgreSQL)
         total_words_query = """
         SELECT 
             COUNT(spelling)
@@ -109,57 +178,11 @@ class ModelSQLTests(unittest.TestCase):
             words
         """
 
-        cursor = self.handler_sql.database.cursor()
-        if not self.handler_sql.select_unconditional_query(cursor, total_words_query):
+        cursor = self.model_sql.handler_sql.database.cursor()
+        if not self.model_sql.handler_sql.select_unconditional_query(cursor, total_words_query):
             self.fail("Could not get total words in dictionaries!")
 
         self.total_words = cursor.fetchone()[0]
-
-    def test_sql_game_all_words(self):
-
-        # Arrange
-
-        # Act
-        game = self.model_sql.generate_game(GameType.FindTranslation)
-
-        # Assert
-        self.assertEqual(len(game), self.total_words, "Number of game rounds should be equal!")
-
-        # Act
-        game = self.model_sql.generate_game(GameType.FindSpelling)
-
-        # Assert
-        self.assertEqual(len(game), self.total_words, "Number of game rounds should be equal!")
-
-    def test_sql_game_words_number(self):
-
-        # Arrange
-        for i in range(10, self.total_words):
-            # Act
-            game = self.model_sql.generate_game(GameType.FindTranslation, i)
-
-            # Assert
-            self.assertEqual(len(game), i, "Number of game rounds should be defined!")
-
-            # Act
-            game = self.model_sql.generate_game(GameType.FindSpelling, i)
-
-            # Assert
-            self.assertEqual(len(game), i, "Number of game rounds should be defined!")
-
-    def test_sql_game_dictionaries(self):
-
-        # Arrange
-        dictionaries = list()
-        dictionaries.append('Idioms')
-        dictionaries.append('Everyday')
-        words_number = 50
-
-        # Act
-        game = self.model_sql.generate_game(GameType.FindTranslation, words_number, dictionaries)
-
-        # Assert
-        self.assertEqual(len(game), words_number, "Number of game rounds should be defined!")
 
 
 if __name__ == '__main__':

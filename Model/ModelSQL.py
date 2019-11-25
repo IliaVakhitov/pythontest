@@ -5,10 +5,12 @@ import logging
 from Model.Dictionary import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
+from Model.HandlerMySQL import HandlerMySQL
 from Model.HandlerPostgreSQL import HandlerPostgreSQL
 from Model.HandlerSQL import HandlerSQL
 from Model.GameType import GameType
 from Model.Model import Model
+from Model.SQLType import SQLType
 
 
 class ModelSQL(Model):
@@ -21,9 +23,15 @@ class ModelSQL(Model):
         Words from selected dictionaries
     """
 
-    def __init__(self) -> None:
-        # self.handler_sql = HandlerSQL()
-        self.handler_sql = HandlerPostgreSQL()
+    def __init__(self, sql_type: SQLType = SQLType.PostgreSQL) -> None:
+
+        if sql_type == SQLType.MySQL:
+            self.handler_sql: HandlerSQL = HandlerMySQL()
+        elif sql_type == SQLType.PostgreSQL:
+            self.handler_sql: HandlerSQL = HandlerPostgreSQL()
+        else:
+            logging.error(f"Undefined SQL type \'{sql_type}\'")
+            exit(1)
 
     def save_state(self, game_rounds: Optional[List[GameRound]]) -> bool:
 
@@ -96,9 +104,9 @@ class ModelSQL(Model):
             logging.info("Not enough words to generate game!")
             return None
 
-        logging.info("Game type {}".format(game_type))
-        logging.info("Word_limit {}".format(word_limit))
-        logging.info("Dictionaries {}".format(dictionaries))
+        logging.info(f"game_type {game_type}")
+        logging.info(f"Word_limit {word_limit}")
+        logging.info(f"Dictionaries {dictionaries}")
 
         words_query = """
             SELECT
@@ -119,10 +127,17 @@ class ModelSQL(Model):
             in_condition = ','.join(['%s'] * len(dictionaries))
             words_query += dictionary_condition % in_condition
 
-        words_query += """
-            ORDER BY 
-                RAND()
-            """
+        if isinstance(self.handler_sql, HandlerMySQL):
+            words_query += """
+                ORDER BY 
+                    RAND()
+                """
+        elif isinstance(self.handler_sql, HandlerPostgreSQL):
+            words_query += """
+                ORDER BY 
+                    RANDOM()
+                """
+
         # Condition is used if param word_limit if defined
         limit_condition = """
             LIMIT %s;
@@ -138,7 +153,6 @@ class ModelSQL(Model):
 
         cursor = self.handler_sql.database.cursor()
         if not self.handler_sql.select_query(cursor, words_query, args):
-            print("Error in Select query.")
             logging.error("Error in Select query.")
             return None
 
@@ -146,7 +160,7 @@ class ModelSQL(Model):
         for entry in cursor:
             words_list.append(DictEntry(entry[1], entry[2], entry[3], entry[0]))
 
-        logging.info("Total game rounds {}".format(len(words_list)))
+        logging.info(f"Total game rounds {len(words_list)}")
 
         return GameGenerator.generate_game(words_list, game_type)
 

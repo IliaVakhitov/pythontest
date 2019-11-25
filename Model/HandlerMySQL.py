@@ -9,9 +9,7 @@ from Model.ModelConsole import ModelConsole
 class HandlerMySQL(HandlerSQL):
 
     def __init__(self) -> None:
-        self.database = self.sql_connection()
-        self.connected = self.database is not None
-        self.connected = self.connected and self.check_sql()
+        super().__init__()
 
     def sql_connection(self):
 
@@ -41,15 +39,10 @@ class HandlerMySQL(HandlerSQL):
         return True
 
     def database_creation(self) -> bool:
-        result = self.drop_db()
-        result = result and self.check_create_database()
-        result = result and self.initialise_tables_list()
+
+        result = self.initialise_tables_list()
         result = result and self.populate_from_json()
         return result
-
-    def populate_from_json(self) -> bool:
-
-        super().populate_from_json()
 
     def select_query(self, cursor, query: str, values: List) -> bool:
 
@@ -88,22 +81,15 @@ class HandlerMySQL(HandlerSQL):
             return False
         return True
 
-    def check_sql(self) -> bool:
-
-        try:
-            cursor = self.database.cursor()
-            cursor.execute("SHOW TABLES")
-            for x in cursor:
-                print(x)
-        except mysql.connector.Error as err:
-            logging.error("Could check SQL. {}".format(err.msg))
-            return False
-
-        return True
-
     def check_create_database(self) -> bool:
+        """
+        Check if DB exist
+        If not create DB, tables and fill dada from JSON
+        :return:
+            True - created successful
+            False - error in creating db
+        """
 
-        # Check if DB exist and create
         logging.info("Connecting to SQL database 'DictionariesDB'")
         try:
             cursor = self.database.cursor()
@@ -111,7 +97,9 @@ class HandlerMySQL(HandlerSQL):
             db_exist = cursor.fetchone()
             if db_exist is None:
                 cursor.execute("CREATE DATABASE DictionariesDB character set utf8;")
-            cursor.execute("USE DictionariesDB;")
+                cursor.execute("USE DictionariesDB;")
+                self.database_creation()
+
         except mysql.connector.Error as err:
             logging.error("Could not create database. {}".format(err.msg))
             return False
@@ -210,3 +198,6 @@ class HandlerMySQL(HandlerSQL):
             return False
 
         return True
+
+    def populate_from_json(self) -> bool:
+        super().populate_from_json()
