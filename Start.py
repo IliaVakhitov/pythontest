@@ -1,7 +1,6 @@
 import logging.handlers
 from Model.GameType import GameType
 from Model.ModelSQL import ModelSQL
-from Model.SQLType import SQLType
 from View import view
 
 logging.basicConfig(
