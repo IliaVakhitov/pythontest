@@ -1,5 +1,8 @@
-from typing import List, Optional
+import codecs
+import json
 import logging
+from typing import List, Optional
+from os import path
 from Model.Dictionary import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
@@ -23,9 +26,14 @@ class ModelSQL(Model):
 
     def __init__(self, sql_type: SQLType = SQLType.PostgreSQL) -> None:
 
-        if sql_type == SQLType.MySQL:
+        # Default values
+        self.sql_type = SQLType.PostgreSQL
+        self.game_rounds = 10
+        self.load_properties()
+
+        if self.sql_type == SQLType.MySQL:
             self.handler_sql: HandlerSQL = HandlerMySQL()
-        elif sql_type == SQLType.PostgreSQL:
+        elif self.sql_type == SQLType.PostgreSQL:
             self.handler_sql: HandlerSQL = HandlerPostgreSQL()
         else:
             logging.error(f"Undefined SQL type \'{sql_type}\'")
@@ -39,6 +47,8 @@ class ModelSQL(Model):
             True - updated successful
             False - entries did not updated
         """
+        self.save_properties()
+
         if game_rounds is None:
             return False
 
@@ -164,3 +174,45 @@ class ModelSQL(Model):
 
     def play_game(self, game_rounds: List[GameRound], automatic_mode: bool = False) -> None:
         super().play_game(game_rounds, automatic_mode)
+
+    def load_properties(self) -> bool:
+        filename = "properties.json"
+        if not path.exists(filename):
+            logging.info(f"File properties.json was not found. Saving default values.")
+            self.save_properties()
+            return True
+        try:
+            with codecs.open(filename, 'r', "utf-8") as json_file:
+                json_data = json.load(json_file)
+        except IOError:
+            error_message = f"File read error {filename}"
+            print(error_message)
+            logging.error(error_message)
+            return False
+        except:
+            error_message = f"File general error {filename}"
+            print(error_message)
+            logging.error(error_message)
+            return False
+
+        self.sql_type = SQLType(json_data['sql_type'])
+        self.game_rounds = json_data['game_rounds']
+        logging.info(f"Properties loaded.")
+        logging.info(f"SQL type \'{self.sql_type.name}\'")
+        logging.info(f"Game rounds \'{self.game_rounds}\'")
+
+        return True
+
+    def save_properties(self) -> bool:
+        filename = "properties.json"
+        json_data = {
+            'sql_type': self.sql_type.value,
+            'game_rounds': self.game_rounds}
+
+        try:
+            with codecs.open(filename, 'w', "utf-8") as outfile:
+                json.dump(json_data, outfile, indent=4, ensure_ascii=False)
+        except:
+            logging.error(f"Error writing file \'{filename}\'")
+            return False
+        return True

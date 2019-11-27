@@ -100,3 +100,5 @@ class Model(ABC):
             game_round.learning_index_changed = (game_round.learning_index != game_round.new_learning_index)
 
         logging.info(f"Game ended. Correct answers {correct_answers}. Incorrect answers {incorrect_answers}")
+        view.print_str(f"Game ended!")
+        view.print_str(f"Correct answers {correct_answers}. Incorrect answers {incorrect_answers}")

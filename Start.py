@@ -25,8 +25,8 @@ view.print_str("2. Find spelling")
 view.print_str("Print \'exit\' for exit.")
 user_choice = view.input_user_choice("Select game type:", "[1-2](?!\\d)")
 
-game = model_sql.generate_game(GameType(user_choice), 10)
-model_sql.play_game(game, True)
+game = model_sql.generate_game(GameType(user_choice), model_sql.game_rounds)
+model_sql.play_game(game, False)
 model_sql.save_state(game)
 
 view.print_str("Goodbye!")
