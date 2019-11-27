@@ -1,5 +1,6 @@
 import logging
 import mysql.connector
+from mysql.connector import Error
 from typing import Optional, Dict, List
 
 from Model.HandlerSQL import HandlerSQL
@@ -20,7 +21,7 @@ class HandlerMySQL(HandlerSQL):
                 user="testuser",
                 passwd="Develop_1"
             )
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not connect to SQL. {}".format(err.msg))
             return None
 
@@ -32,7 +33,7 @@ class HandlerMySQL(HandlerSQL):
         logging.info("Closing SQL connection")
         try:
             self.database.close()
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not close sql connection. {}".format(err.msg))
             return False
         return True
@@ -47,7 +48,7 @@ class HandlerMySQL(HandlerSQL):
 
         try:
             cursor.execute(query, values)
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not select values. {}".format(err.msg))
             return False
         return True
@@ -56,8 +57,8 @@ class HandlerMySQL(HandlerSQL):
 
         try:
             cursor.execute(query)
-        except mysql.connector.Error as err:
-            logging.error("Could not select values. {}".format(err.msg))
+        except Error.msg as err:
+            logging.error("Could not select values. {}".format(err))
             return False
         return True
 
@@ -65,7 +66,7 @@ class HandlerMySQL(HandlerSQL):
 
         try:
             cursor.execute(query, values)
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not insert values. {}".format(err.msg))
             return False
         return True
@@ -75,7 +76,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             cursor = self.database.cursor()
             cursor.execute(query, values)
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not update values. {}".format(err.msg))
             return False
         return True
@@ -99,7 +100,7 @@ class HandlerMySQL(HandlerSQL):
                 cursor.execute("USE DictionariesDB;")
                 self.database_creation()
 
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not create database. {}".format(err.msg))
             return False
         cursor.execute("USE DictionariesDB;")
@@ -114,7 +115,7 @@ class HandlerMySQL(HandlerSQL):
             cursor.execute("DROP TABLE IF EXISTS words;")
             cursor.execute("DROP TABLE IF EXISTS dictionaries;")
             cursor.execute("DROP TABLE IF EXISTS languages;")
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not drop table. {}".format(err.msg))
             return False
         logging.info("SQL tables dropped successful")
@@ -126,7 +127,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             cursor = self.database.cursor()
             cursor.execute("DROP DATABASE IF EXISTS DictionariesDB;")
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not drop database. {}".format(err.msg))
             return False
 
@@ -184,7 +185,7 @@ class HandlerMySQL(HandlerSQL):
                 logging.info(f"Table {table_name} created")
             else:
                 logging.info("Table {} already exist".format(table_name))
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not create table. {}".format(err.msg))
             return False
         return True
@@ -192,7 +193,7 @@ class HandlerMySQL(HandlerSQL):
     def commit(self) -> bool:
         try:
             self.database.commit()
-        except mysql.connector.Error as err:
+        except Error.msg as err:
             logging.error("Could not commit database. {}".format(err.msg))
             return False
 
