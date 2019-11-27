@@ -1,14 +1,16 @@
 import logging
 from abc import ABC, abstractmethod
-
 import mysql.connector
 from typing import List
 from Model.ModelConsole import ModelConsole
+from View import view
 
 
 class HandlerSQL(ABC):
 
     def __init__(self) -> None:
+        self.username = view.input_str("SQL user name:")
+        self.password = view.input_password("SQL user password:")
         self.database = self.sql_connection()
         self.connected = self.database is not None
         self.connected = self.connected and self.check_create_database()

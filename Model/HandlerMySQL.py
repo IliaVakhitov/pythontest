@@ -1,8 +1,7 @@
 import logging
 import mysql.connector
 from mysql.connector import Error
-from typing import Optional, Dict, List
-
+from typing import Dict, List
 from Model.HandlerSQL import HandlerSQL
 
 
@@ -13,19 +12,19 @@ class HandlerMySQL(HandlerSQL):
 
     def sql_connection(self):
 
-        logging.info("Connecting to SQL")
+        logging.info("Connecting to MySQL")
 
         try:
             database = mysql.connector.connect(
                 host="localhost",
-                user="testuser",
-                passwd="Develop_1"
+                user=self.username,
+                passwd=self.password
             )
-        except Error.msg as err:
-            logging.error("Could not connect to SQL. {}".format(err.msg))
+        except Error as err:
+            logging.error(f"Could not connect to MySQL. {err.msg}")
             return None
 
-        logging.info("Connected to SQL successfully.")
+        logging.info("Connected to MySQL successfully.")
         return database
 
     def close_connection(self, ) -> bool:
@@ -34,7 +33,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             self.database.close()
         except Error.msg as err:
-            logging.error("Could not close sql connection. {}".format(err.msg))
+            logging.error(f"Could not close sql connection. {err.msg}")
             return False
         return True
 
@@ -49,7 +48,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             cursor.execute(query, values)
         except Error.msg as err:
-            logging.error("Could not select values. {}".format(err.msg))
+            logging.error(f"Could not select values. {err.msg}")
             return False
         return True
 
@@ -58,7 +57,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             cursor.execute(query)
         except Error.msg as err:
-            logging.error("Could not select values. {}".format(err))
+            logging.error(f"Could not select values. {err.msg}")
             return False
         return True
 
@@ -67,7 +66,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             cursor.execute(query, values)
         except Error.msg as err:
-            logging.error("Could not insert values. {}".format(err.msg))
+            logging.error(f"Could not insert values. {err.msg}")
             return False
         return True
 
@@ -77,7 +76,7 @@ class HandlerMySQL(HandlerSQL):
             cursor = self.database.cursor()
             cursor.execute(query, values)
         except Error.msg as err:
-            logging.error("Could not update values. {}".format(err.msg))
+            logging.error(f"Could not update values. {err.msg}")
             return False
         return True
 
@@ -101,7 +100,7 @@ class HandlerMySQL(HandlerSQL):
                 self.database_creation()
 
         except Error.msg as err:
-            logging.error("Could not create database. {}".format(err.msg))
+            logging.error(f"Could not create database. {err.msg}")
             return False
         cursor.execute("USE DictionariesDB;")
         logging.info("Connected to database successfully.")
@@ -116,7 +115,7 @@ class HandlerMySQL(HandlerSQL):
             cursor.execute("DROP TABLE IF EXISTS dictionaries;")
             cursor.execute("DROP TABLE IF EXISTS languages;")
         except Error.msg as err:
-            logging.error("Could not drop table. {}".format(err.msg))
+            logging.error(f"Could not drop table. {err.msg}")
             return False
         logging.info("SQL tables dropped successful")
         return True
@@ -128,7 +127,7 @@ class HandlerMySQL(HandlerSQL):
             cursor = self.database.cursor()
             cursor.execute("DROP DATABASE IF EXISTS DictionariesDB;")
         except Error.msg as err:
-            logging.error("Could not drop database. {}".format(err.msg))
+            logging.error(f"Could not drop database. {err.msg}")
             return False
 
         return True
@@ -174,19 +173,19 @@ class HandlerMySQL(HandlerSQL):
     # Create table
     def check_create_table(self, table_name, table_description) -> bool:
 
-        logging.info("Checking table {}".format(table_name))
+        logging.info(f"Checking table \'{table_name}")
         try:
             cursor = self.database.cursor()
-            query = "SHOW TABLES LIKE '{}';".format(table_name)
+            query = f"SHOW TABLES LIKE '{table_name}';"
             cursor.execute(query)
             table_exist = cursor.fetchone()
             if table_exist is None:
                 cursor.execute(table_description)
                 logging.info(f"Table {table_name} created")
             else:
-                logging.info("Table {} already exist".format(table_name))
+                logging.info(f"Table {table_name} already exist")
         except Error.msg as err:
-            logging.error("Could not create table. {}".format(err.msg))
+            logging.error(f"Could not create table. {err.msg}")
             return False
         return True
 
@@ -194,7 +193,7 @@ class HandlerMySQL(HandlerSQL):
         try:
             self.database.commit()
         except Error.msg as err:
-            logging.error("Could not commit database. {}".format(err.msg))
+            logging.error(f"Could not commit database. {err.msg}")
             return False
 
         return True

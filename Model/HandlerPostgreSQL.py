@@ -1,10 +1,7 @@
 import logging
 from typing import List, Dict
-
 from Model.HandlerSQL import HandlerSQL
 import psycopg2
-
-from Model.ModelConsole import ModelConsole
 
 
 class HandlerPostgreSQL(HandlerSQL):
@@ -66,8 +63,8 @@ class HandlerPostgreSQL(HandlerSQL):
         try:
             database = psycopg2.connect(
                 host="localhost",
-                user="testuser",
-                password="Develop_1",
+                user=self.username,
+                password=self.password,
                 database="postgres"
             )
             database.autocommit = True

@@ -1,8 +1,4 @@
 import unittest
-
-from Model.HandlerMySQL import HandlerMySQL
-from Model.HandlerPostgreSQL import HandlerPostgreSQL
-from Model.HandlerSQL import HandlerSQL
 from Model.ModelConsole import ModelConsole
 from Model.GameType import GameType
 from Model.GameGenerator import GameGenerator
