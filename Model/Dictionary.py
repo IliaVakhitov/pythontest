@@ -1,6 +1,7 @@
 import codecs
 import json
 import logging
+from json import JSONDecodeError
 from typing import List
 
 import xlrd as xlrd
@@ -182,22 +183,28 @@ class DictionaryLoaderJson(DictionaryLoader):
         return True
 
     def load_dictionaries(self):
-
+        """
+        TODO
+        :return:
+        """
         try:
             with codecs.open(self.filename, 'r', "utf-8") as json_file:
                 json_data = json.load(json_file)
+
         except FileNotFoundError:
-            error_message = "File not found {}".format(self.filename)
+            error_message = f"File not found {self.filename}"
             print(error_message)
             logging.error(error_message)
             return None
-        except IOError:
-            error_message = "File read error {}".format(self.filename)
+
+        except IOError as err:
+            error_message = f"File \'{self.filename}\' read error \'{err}\'"
             print(error_message)
             logging.error(error_message)
             return None
-        except:
-            error_message = "File general error {}".format(self.filename)
+
+        except JSONDecodeError as err:
+            error_message = f"Json parse error {err}"
             print(error_message)
             logging.error(error_message)
             return None

@@ -1,14 +1,13 @@
 import codecs
 import json
 import logging
+from json import JSONDecodeError
 from typing import List, Optional
 from os import path
 from Model.Dictionary import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
-from Model.HandlerMySQL import HandlerMySQL
-from Model.HandlerPostgreSQL import HandlerPostgreSQL
-from Model.HandlerSQL import HandlerSQL
+from Model.DatabaseConnector import DatabaseConnector
 from Model.GameType import GameType
 from Model.Model import Model
 from Model.SQLType import SQLType
@@ -24,20 +23,13 @@ class ModelSQL(Model):
         Words from selected dictionaries
     """
 
-    def __init__(self, sql_type: SQLType = SQLType.PostgreSQL) -> None:
+    def __init__(self) -> None:
 
         # Default values
-        self.sql_type = SQLType.PostgreSQL
+
         self.game_rounds = 10
         self.load_properties()
-
-        if self.sql_type == SQLType.MySQL:
-            self.handler_sql: HandlerSQL = HandlerMySQL()
-        elif self.sql_type == SQLType.PostgreSQL:
-            self.handler_sql: HandlerSQL = HandlerPostgreSQL()
-        else:
-            logging.error(f"Undefined SQL type \'{sql_type}\'")
-            exit(1)
+        self.database_connector: DatabaseConnector = DatabaseConnector()
 
     def save_state(self, game_rounds: Optional[List[GameRound]]) -> bool:
 
@@ -47,7 +39,6 @@ class ModelSQL(Model):
             True - updated successful
             False - entries did not updated
         """
-        self.save_properties()
 
         if game_rounds is None:
             return False
@@ -60,7 +51,7 @@ class ModelSQL(Model):
             WHERE 
                 id = %(id)s;
             """
-        # Log
+
         logging.info("Updating learning_index in database")
         for game_round in game_rounds:
             if not game_round.learning_index_changed:
@@ -74,11 +65,11 @@ class ModelSQL(Model):
                 'learning_index': game_round.new_learning_index,
                 'id': game_round.dictionary_entry.sql_id}
 
-            result = self.handler_sql.update_query(update_query, args)
+            result = self.database_connector.execute_query(update_query, args)
             if not result:
                 return False
 
-        return self.handler_sql.commit()
+        return self.database_connector.commit()
 
     def load_dictionaries(self):
         pass
@@ -135,16 +126,12 @@ class ModelSQL(Model):
             in_condition = ','.join(['%s'] * len(dictionaries))
             words_query += dictionary_condition % in_condition
 
-        if isinstance(self.handler_sql, HandlerMySQL):
-            words_query += """
-                ORDER BY 
-                    RAND()
-                """
-        elif isinstance(self.handler_sql, HandlerPostgreSQL):
-            words_query += """
-                ORDER BY 
-                    RANDOM()
-                """
+        # TODO put into DatabaseConnector class
+        rand_function = "RAND()" if self.database_connector.sql_type == SQLType.MySQL else "RANDOM()"
+        words_query += f"""
+            ORDER BY 
+                {rand_function}
+            """
 
         # Condition is used if param word_limit if defined
         limit_condition = """
@@ -159,13 +146,12 @@ class ModelSQL(Model):
             words_query += limit_condition
             args.append(word_limit)
 
-        cursor = self.handler_sql.database.cursor()
-        if not self.handler_sql.select_query(cursor, words_query, args):
+        if not self.database_connector.execute_query(words_query, args):
             logging.error("Error in Select query.")
             return None
 
         words_list: List[DictEntry] = []
-        for entry in cursor:
+        for entry in self.database_connector.cursor:
             words_list.append(DictEntry(entry[1], entry[2], entry[3], entry[0]))
 
         logging.info(f"Total game rounds {len(words_list)}")
@@ -176,43 +162,31 @@ class ModelSQL(Model):
         super().play_game(game_rounds, automatic_mode)
 
     def load_properties(self) -> bool:
-        filename = "properties.json"
+        filename = "config.json"
         if not path.exists(filename):
-            logging.info(f"File properties.json was not found. Saving default values.")
-            self.save_properties()
+            logging.info(f"File config.json was not found. Using default values.")
             return True
+
         try:
             with codecs.open(filename, 'r', "utf-8") as json_file:
                 json_data = json.load(json_file)
         except IOError:
-            error_message = f"File read error {filename}"
-            print(error_message)
-            logging.error(error_message)
-            return False
-        except:
-            error_message = f"File general error {filename}"
+            error_message = f"File read error \'{filename}\'"
             print(error_message)
             logging.error(error_message)
             return False
 
-        self.sql_type = SQLType(json_data['sql_type'])
+        except JSONDecodeError as err:
+            error_message = f"Json parse error \'{err}\'"
+            print(error_message)
+            logging.error(error_message)
+            return False
+
         self.game_rounds = json_data['game_rounds']
+        # TODO
+        dictionaries = json_data['dictionaries']
         logging.info(f"Properties loaded.")
-        logging.info(f"SQL type \'{self.sql_type.name}\'")
         logging.info(f"Game rounds \'{self.game_rounds}\'")
 
         return True
 
-    def save_properties(self) -> bool:
-        filename = "properties.json"
-        json_data = {
-            'sql_type': self.sql_type.value,
-            'game_rounds': self.game_rounds}
-
-        try:
-            with codecs.open(filename, 'w', "utf-8") as outfile:
-                json.dump(json_data, outfile, indent=4, ensure_ascii=False)
-        except:
-            logging.error(f"Error writing file \'{filename}\'")
-            return False
-        return True

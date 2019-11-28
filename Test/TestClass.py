@@ -101,7 +101,7 @@ class ModelSQLCases:
 
         def initialise_sql(self):
 
-            self.model_sql = ModelSQL(SQLType.MySQL)
+            self.model_sql = ModelSQL()
             total_words_query = """
             SELECT 
                 COUNT(spelling)
@@ -109,8 +109,8 @@ class ModelSQLCases:
                 words
             """
 
-            cursor = self.model_sql.handler_sql.database.cursor()
-            if not self.model_sql.handler_sql.select_unconditional_query(cursor, total_words_query):
+            cursor = self.model_sql.database_connector.database.cursor
+            if not self.model_sql.database_connector.execute_query(total_words_query):
                 self.fail("Could not get total words in dictionaries!")
 
             self.total_words = cursor.fetchone()[0]
@@ -166,7 +166,7 @@ class ModelPostgreSQLTests(ModelSQLCases.ModelSQLTests):
 
     def initialise_sql(self):
 
-        self.model_sql = ModelSQL(SQLType.PostgreSQL)
+        self.model_sql = ModelSQL()
         total_words_query = """
         SELECT 
             COUNT(spelling)
@@ -174,8 +174,8 @@ class ModelPostgreSQLTests(ModelSQLCases.ModelSQLTests):
             words
         """
 
-        cursor = self.model_sql.handler_sql.database.cursor()
-        if not self.model_sql.handler_sql.select_unconditional_query(cursor, total_words_query):
+        cursor = self.model_sql.database_connector.cursor
+        if not self.model_sql.database_connector.execute_query(total_words_query):
             self.fail("Could not get total words in dictionaries!")
 
         self.total_words = cursor.fetchone()[0]

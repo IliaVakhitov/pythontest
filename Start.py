@@ -12,7 +12,7 @@ logging.basicConfig(
 
 model_sql = ModelSQL()
 
-if not model_sql.handler_sql.connected:
+if not model_sql.database_connector.connected:
     logging.info("SQL didn't connected")
     exit(1)
 
