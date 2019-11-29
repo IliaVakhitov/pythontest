@@ -4,7 +4,10 @@ from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
 from Model.GameType import GameType
 from Model.Model import Model
-from Model.Dictionary import Dictionary, DictionaryLoadedXls, DictEntry, DictionaryLoaderJson
+from Model.Dictionary import Dictionary
+from Model.DictEntry import DictEntry
+from Model.DictionaryLoadedXls import DictionaryLoadedXls
+from Model.DictionaryLoaderJson import DictionaryLoaderJson
 from typing import List, Optional
 
 

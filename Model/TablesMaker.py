@@ -3,13 +3,61 @@ from typing import Dict
 
 from Model.ModelConsole import ModelConsole
 from Model.SQLType import SQLType
+from View import view
 
 
 class TablesMaker:
 
     def __init__(self, database_connector):
         self.database_connector = database_connector
-        self.database_creation()
+
+    def check_tables(self) -> bool:
+
+        """
+        Check tables
+        If table doesn't exist, creates it
+        :return:
+            True - created successful
+            False - error in creating tables
+        """
+
+        result = self.initialise_tables_list()
+        if result:
+            return self.check_table_words()
+        else:
+            return False
+
+    def check_table_words(self) -> bool:
+
+        """
+        If table words is empty, ask to fill from json
+        :return:
+            True - table is not empty
+            False - could not fill the table
+        """
+
+        total_words_query = """
+            SELECT 
+                COUNT(spelling)
+            FROM
+                words
+            """
+        logging.info("Checking entries in table words")
+        if not self.database_connector.execute_query(total_words_query):
+            logging.error("Could not get total words in dictionaries!")
+            return False
+
+        total_words = self.database_connector.cursor.fetchone()[0]
+        logging.info(f"Total words: {total_words}")
+        if total_words == 0:
+            logging.info("Request to refill data from Json")
+            view.print_str("No words in table Words!")
+            user_answer = view.input_str("Would you like to refill data from JSON? y/n")
+            if user_answer == "y":
+                logging.info("Refilling from Json")
+                return self.database_creation()
+
+        return True
 
     def populate_from_json(self) -> bool:
         cursor = self.database_connector.cursor
@@ -73,6 +121,11 @@ class TablesMaker:
         return result
 
     def initialise_tables_list(self) -> bool:
+
+        """
+        TODO
+        :return:
+        """
         sql_tables: Dict[str, str] = {}
         sql_tables['languages'] = ("""
                     CREATE TABLE 
@@ -83,7 +136,7 @@ class TablesMaker:
 
         sql_tables['dictionaries'] = ("""
                     CREATE TABLE 
-                       dictionaries (
+                       \"dictionaries\" (
                            \"dictionary_name\" VARCHAR(50) NOT NULL PRIMARY KEY, 
                            \"native_language\" VARCHAR(25), 
                            \"foreign_language\" VARCHAR(25), 
@@ -106,7 +159,6 @@ class TablesMaker:
 
         for table_name, table_description in sql_tables.items():
             if not self.check_create_table(table_name, table_description):
-                logging.error(f"Could not create table \'{table_name}\'")
                 return False
 
         return True
@@ -125,7 +177,7 @@ class TablesMaker:
             cursor = self.database_connector.cursor
             query = ""
             if self.database_connector.sql_type == SQLType.MySQL:
-                query = "SHOW TABLES LIKE '%(table_name)s';"
+                query = "SHOW TABLES LIKE %(table_name)s;"
             elif self.database_connector.sql_type == SQLType.PostgreSQL:
                 query = """
                     SELECT EXISTS 
@@ -149,7 +201,8 @@ class TablesMaker:
                 logging.info(f"Table \'{table_name}\' already exist")
 
         except BaseException as err:
-            logging.error(f"Could not create table \'{table_name}\' {err}")
+            logging.error(f"Could not create table \'{table_name}\'.")
+            logging.error(f"Error: {err}")
             return False
 
         return True
