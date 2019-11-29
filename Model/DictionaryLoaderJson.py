@@ -1,12 +1,12 @@
 import codecs
 import json
 import logging
-from json import JSONDecodeError
-from typing import List
+from typing import List, Optional
 
 from Model.DictEntry import DictEntry
 from Model.Dictionary import Dictionary
 from Model.DictionaryLoader import DictionaryLoader
+from Model.JsonManager import JsonManager
 
 
 class DictionaryLoaderJson(DictionaryLoader):
@@ -20,44 +20,22 @@ class DictionaryLoaderJson(DictionaryLoader):
 
     def __init__(self):
         self.filename = ""
+        self.json_loader = JsonManager(self.filename)
 
     def save_dictionaries(self, dictionaries: List[Dictionary]) -> bool:
-        json_data = self.generate_json_data(dictionaries)
-        try:
-            with codecs.open(self.filename, 'w', "utf-8") as outfile:
-                json.dump(json_data, outfile, indent=4, ensure_ascii=False)
-        except IOError:
-            logging.error(f"Error writing file \'{self.filename}\'")
-            return False
 
-        return True
+        return self.json_loader.save_json_data(self.generate_json_data(dictionaries))
 
-    def load_dictionaries(self):
+    def load_dictionaries(self) -> Optional[List[Dictionary]]:
+
         """
-        TODO
+        Creates list of Dictionaries with values loaded from Json
         :return:
+            None if not successful
+            List[Dictionary]
         """
-        try:
-            with codecs.open(self.filename, 'r', "utf-8") as json_file:
-                json_data = json.load(json_file)
 
-        except FileNotFoundError:
-            error_message = f"File not found {self.filename}"
-            print(error_message)
-            logging.error(error_message)
-            return None
-
-        except IOError as err:
-            error_message = f"File \'{self.filename}\' read error \'{err}\'"
-            print(error_message)
-            logging.error(error_message)
-            return None
-
-        except JSONDecodeError as err:
-            error_message = f"Json parse error {err}"
-            print(error_message)
-            logging.error(error_message)
-            return None
+        json_data = self.json_loader.load_json_data()
 
         dictionaries: List[Dictionary] = []
         for dict_entry in json_data['dictionaries']:

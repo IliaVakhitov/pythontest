@@ -107,9 +107,12 @@ class TablesMaker:
     def initialise_tables_list(self) -> bool:
 
         """
-        TODO
+        Create SQL tables in database
         :return:
+            True: Tables created in database
+            False: Error in log
         """
+
         sql_tables: Dict[str, str] = {}
         sql_tables['languages'] = (self.query_manager.query_create_languages())
         sql_tables['dictionaries'] = (self.query_manager.query_create_dictionaries())

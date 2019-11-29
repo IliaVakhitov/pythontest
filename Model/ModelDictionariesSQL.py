@@ -1,8 +1,4 @@
-import codecs
-import json
 import logging
-from json import JSONDecodeError
-from os import path
 from typing import List, Optional
 
 from Model.DatabaseConnector import DatabaseConnector
@@ -10,6 +6,7 @@ from Model.DictEntry import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
 from Model.GameType import GameType
+from Model.JsonManager import JsonManager
 from Model.ModelDictionaries import Model
 from Model.QueryManager import QueryManager
 
@@ -27,7 +24,10 @@ class ModelSQL(Model):
     def __init__(self) -> None:
 
         # Default values
-        self.game_rounds = 10
+        # Game rounds more than 4
+        self.game_rounds: int = 10  # > 4
+        self.dictionaries: List[str] = list("")
+
         self.load_properties()
         self.database_connector: DatabaseConnector = DatabaseConnector()
         self.query_manager: QueryManager = QueryManager(self.database_connector.sql_type)
@@ -71,16 +71,13 @@ class ModelSQL(Model):
 
     def generate_game(
             self,
-            game_type: GameType,
-            dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+            game_type: GameType) -> Optional[List[GameRound]]:
 
         """
         Generates list of game rounds with query to SQL database.
         Query used to get list of DictEntries.
         Than game generated with GameGenerator class.
         :param game_type: enum game type
-        :param word_limit: 0 or higher than 4. 4 - minimum for a game
-        :param dictionaries: list of str with names of dictionaries
         :return:
             None - could not generate game
             List of game rounds
@@ -91,10 +88,10 @@ class ModelSQL(Model):
             logging.info("Not enough words to generate game!")
             return None
 
-        logging.info(f"game_type {game_type}")
-        logging.info(f"Word_limit {self.game_rounds}")
-        logging.info(f"Dictionaries {dictionaries}")
-        query_dict = self.query_manager.query_select_words(self.game_rounds, dictionaries)
+        logging.info(f"game_type {game_type.name}")
+        logging.info(f"Word_limit \'{self.game_rounds}\'")
+        logging.info(f"Dictionaries {self.dictionaries}")
+        query_dict = self.query_manager.query_select_words(self.game_rounds, self.dictionaries)
 
         if not self.database_connector.execute_query(query_dict['query_select_words'], query_dict['args']):
             logging.error("Error in Select query.")
@@ -115,35 +112,21 @@ class ModelSQL(Model):
     def load_properties(self) -> bool:
 
         """
-        TODO
+        Load config with default game generation values
         :return:
+            True values loaded
+            False use default values
         """
 
-        filename = "config.json"
-        if not path.exists(filename):
-            logging.info(f"File config.json was not found. Using default values.")
-            return True
-
-        try:
-            with codecs.open(filename, 'r', "utf-8") as json_file:
-                json_data = json.load(json_file)
-        except IOError:
-            error_message = f"File read error \'{filename}\'"
-            print(error_message)
-            logging.error(error_message)
-            return False
-
-        except JSONDecodeError as err:
-            error_message = f"Json parse error \'{err}\'"
-            print(error_message)
-            logging.error(error_message)
-            return False
+        json_loader = JsonManager("config.json")
+        json_data = json_loader.load_json_data()
 
         self.game_rounds = json_data['game_rounds']
-        # TODO
-        dictionaries = json_data['dictionaries']
-        logging.info(f"Properties loaded.")
+        self.dictionaries = json_data['dictionaries']
+
+        logging.info(f"Config loaded.")
         logging.info(f"Game rounds \'{self.game_rounds}\'")
+        logging.info(f"Dictionaries {self.dictionaries}")
 
         return True
 

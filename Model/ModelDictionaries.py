@@ -30,8 +30,7 @@ class Model(ABC):
     @abstractmethod
     def generate_game(
             self,
-            game_type: GameType,
-            dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+            game_type: GameType) -> Optional[List[GameRound]]:
         pass
 
     def reset_progress(self, words):

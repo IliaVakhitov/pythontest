@@ -66,8 +66,7 @@ class ModelConsole(Model):
         logging.info("Total dictionaries loaded {}".format(len(self.dictionaries)))
 
     def generate_game(self,
-                      game_type: GameType,
-                      dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
+                      game_type: GameType) -> Optional[List[GameRound]]:
 
         return GameGenerator.generate_game(self.words, game_type, self.game_rounds)
 

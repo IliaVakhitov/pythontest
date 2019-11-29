@@ -1,9 +1,12 @@
 import unittest
-from Model.ModelDictionariesConsole import ModelConsole
-from Model.GameType import GameType
+
 from Model.GameGenerator import GameGenerator
+from Model.GameType import GameType
+from Model.ModelDictionariesConsole import ModelConsole
 from Model.ModelDictionariesSQL import ModelSQL
-from Model.SQLType import SQLType
+
+
+# TODO Make external files available for tests
 
 
 class ModelDictionariesConsoleTests(unittest.TestCase):

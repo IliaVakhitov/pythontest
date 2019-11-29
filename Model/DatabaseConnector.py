@@ -3,6 +3,7 @@ import logging
 import mysql.connector
 import psycopg2
 
+from Model.JsonManager import JsonManager
 from Model.SQLType import SQLType
 from Model.TablesMaker import TablesMaker
 from View import view
@@ -13,11 +14,16 @@ class DatabaseConnector:
     def __init__(self, sql_type: SQLType = SQLType.PostgreSQL) -> None:
 
         self.sql_type = sql_type
-        # TODO load values from config, it not defined, then use defaults
-        self.username = view.input_str("SQL user name:")
-        self.password = view.input_password("SQL user password:")
-        self.database_name = "DictionariesDB"
-        self.host = "localhost"
+        self.load_config()
+
+        if self.username == "":
+            self.username = view.input_str("SQL user name:")
+        if self.password == "":
+            self.password = view.input_password("SQL user password:")
+        if self.database_name == "":
+            self.database_name = "DictionariesDB"
+        if self.host == "":
+            self.host = "localhost"
 
         self.database = self.sql_connection()
         self.connected = self.database is not None
@@ -139,5 +145,30 @@ class DatabaseConnector:
         except BaseException as err:
             logging.error(f"Could not commit database. {err}")
             return False
+
+        return True
+
+    def load_config(self) -> bool:
+
+        """
+        Load config with default game generation values
+        and database connection values
+        :return:
+            True values loaded
+            False use default values
+        """
+
+        json_loader = JsonManager("database_config.json")
+        json_data = json_loader.load_json_data()
+
+        self.username = json_data['username']
+        self.password = json_data['password']
+        self.database_name = json_data['database_name']
+        self.host = json_data['host']
+
+        logging.info(f"Database config loaded.")
+        logging.info(f"Username \'{self.username}\'")
+        logging.info(f"Database name \'{self.database_name}\'")
+        logging.info(f"Host \'{self.host}\'")
 
         return True
