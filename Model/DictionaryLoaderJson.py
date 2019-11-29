@@ -4,8 +4,8 @@ import logging
 from json import JSONDecodeError
 from typing import List
 
-from Model.Dictionary import Dictionary
 from Model.DictEntry import DictEntry
+from Model.Dictionary import Dictionary
 from Model.DictionaryLoader import DictionaryLoader
 
 

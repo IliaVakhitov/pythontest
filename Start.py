@@ -1,6 +1,6 @@
 import logging.handlers
 from Model.GameType import GameType
-from Model.ModelSQL import ModelSQL
+from Model.ModelDictionariesSQL import ModelSQL
 from View import view
 
 logging.basicConfig(
@@ -23,7 +23,7 @@ view.print_str("2. Find spelling")
 view.print_str("Print \'exit\' for exit.")
 user_choice = view.input_user_choice("Select game type:", "[1-2](?!\\d)")
 
-game = model_sql.generate_game(GameType(user_choice), model_sql.game_rounds)
+game = model_sql.generate_game(GameType(user_choice))
 model_sql.play_game(game, True)
 model_sql.save_state(game)
 model_sql.database_connector.close_connection()

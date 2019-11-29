@@ -1,14 +1,15 @@
-import os
 import logging
+import os
+from typing import List, Optional
+
+from Model.DictEntry import DictEntry
+from Model.Dictionary import Dictionary
+from Model.DictionaryLoadedXls import DictionaryLoadedXls
+from Model.DictionaryLoaderJson import DictionaryLoaderJson
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
 from Model.GameType import GameType
-from Model.Model import Model
-from Model.Dictionary import Dictionary
-from Model.DictEntry import DictEntry
-from Model.DictionaryLoadedXls import DictionaryLoadedXls
-from Model.DictionaryLoaderJson import DictionaryLoaderJson
-from typing import List, Optional
+from Model.ModelDictionaries import Model
 
 
 class ModelConsole(Model):
@@ -23,6 +24,7 @@ class ModelConsole(Model):
 
         self.dictionaries: List[Dictionary] = []
         self.words: List[DictEntry] = []
+        self.game_rounds = 10
 
     def save_state(self, game_rounds: List[GameRound]) -> None:
 
@@ -65,10 +67,9 @@ class ModelConsole(Model):
 
     def generate_game(self,
                       game_type: GameType,
-                      words_number: int = 0,
                       dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
 
-        return GameGenerator.generate_game(self.words, game_type, words_number)
+        return GameGenerator.generate_game(self.words, game_type, self.game_rounds)
 
     def reset_progress(self, words):
 

@@ -1,6 +1,8 @@
 import logging
-import xlrd
 from typing import List
+
+import xlrd
+
 from Model.Dictionary import Dictionary
 from Model.DictionaryLoader import DictionaryLoader
 

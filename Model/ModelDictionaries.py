@@ -1,7 +1,8 @@
-import random
 import logging
+import random
 from abc import ABC, abstractmethod
 from typing import Optional, List
+
 from Model.Dictionary import Dictionary
 from Model.GameRound import GameRound
 from Model.GameType import GameType
@@ -30,7 +31,6 @@ class Model(ABC):
     def generate_game(
             self,
             game_type: GameType,
-            words_number: int = 0,
             dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
         pass
 
@@ -63,7 +63,8 @@ class Model(ABC):
         """
         if game_rounds is None:
             logging.info("No game rounds! Game is over!")
-            print("Game over!")
+            if not automatic_mode:
+                view.print_str("Game over!")
             return None
 
         if not automatic_mode:
@@ -100,5 +101,6 @@ class Model(ABC):
             game_round.learning_index_changed = (game_round.learning_index != game_round.new_learning_index)
 
         logging.info(f"Game ended. Correct answers {correct_answers}. Incorrect answers {incorrect_answers}")
-        view.print_str(f"Game ended!")
-        view.print_str(f"Correct answers {correct_answers}. Incorrect answers {incorrect_answers}")
+        if not automatic_mode:
+            view.print_str(f"Game ended!")
+            view.print_str(f"Correct answers {correct_answers}. Incorrect answers {incorrect_answers}")

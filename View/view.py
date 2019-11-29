@@ -4,12 +4,14 @@ from getpass import getpass
 
 
 def print_str(message) -> None:
+
     print(message)
 
 
 def input_str(message) -> str:
+
     read_str = input(message)
-    logging.info("User input {}".format(read_str))
+    logging.info(f"User input \'{read_str}\'")
     if read_str == "exit()":
         logging.info("User exit")
         exit()
@@ -35,5 +37,6 @@ def input_user_answer(message: str = "") -> int:
 
 
 def input_password(message: str = "") -> str:
+
     print(message)
     return getpass()

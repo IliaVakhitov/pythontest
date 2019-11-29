@@ -1,9 +1,10 @@
 import logging
+
 import mysql.connector
 import psycopg2
 
-from Model.TablesMaker import TablesMaker
 from Model.SQLType import SQLType
+from Model.TablesMaker import TablesMaker
 from View import view
 
 
@@ -30,56 +31,89 @@ class DatabaseConnector:
     def sql_connection(self):
 
         """
-        TODO
+        Create an SQL connection and return database
         :return:
+            database: connected to SQL sever
         """
         logging.info(f"Connecting to {self.sql_type.name}")
-        database = None
-        try:
-            if self.sql_type == SQLType.MySQL:
-                database = mysql.connector.connect(
-                    host=self.host,
-                    user=self.username,
-                    passwd=self.password,
-                    database=self.database_name
-                )
-            elif self.sql_type == SQLType.PostgreSQL:
-                database = psycopg2.connect(
-                    host=self.host,
-                    user=self.username,
-                    password=self.password,
-                    database=self.database_name
-                )
-                database.autocommit = True
-
-        except BaseException as err:
-            logging.error(f"Could not connect to {self.sql_type.name}")
-            logging.error(f"Message: {err}")
+        if self.sql_type == SQLType.MySQL:
+            database = self.mysql_connection()
+        elif self.sql_type == SQLType.PostgreSQL:
+            database = self.postgresql_connection()
+        else:
+            logging.info(f"Undefined SQL type {self.sql_type.name}")
             return None
 
         logging.info(f"Connected to {self.sql_type.name} successful.")
         return database
 
+    def mysql_connection(self):
+
+        """
+        Create an SQL connection and return database
+        :return:
+            database: connected to MySQL sever
+        """
+        try:
+            database = mysql.connector.connect(
+                host=self.host,
+                user=self.username,
+                passwd=self.password,
+                database=self.database_name
+            )
+        except mysql.connector.Error as err:
+            logging.error(f"Could not connect to {self.sql_type.name}")
+            logging.error(f"Message: {err}")
+            return None
+
+        return database
+
+    def postgresql_connection(self):
+
+        """
+        Create a connection and return database
+        :return:
+            database: connected to PostgreSQL sever
+        """
+        try:
+            database = psycopg2.connect(
+                host=self.host,
+                user=self.username,
+                password=self.password,
+                database=self.database_name
+            )
+            database.autocommit = True
+
+        except psycopg2.Error as err:
+            logging.error(f"Could not connect to {self.sql_type.name}")
+            logging.error(f"Message: {err}")
+            return None
+
+        return database
+
     def close_connection(self) -> bool:
 
         """
-        TODO
+        Closing SQL connection
         :return:
         """
         logging.info("Closing SQL connection")
         try:
             self.database.close()
         except BaseException as err:
-            logging.error("Could not close sql connection. {}".format(err))
+            logging.error("Error while closing sql connection")
+            logging.error(f"{err}")
             return False
 
     def execute_query(self, query: str, values=None) -> bool:
 
         """
-        TODO
-        :param query:
-        :param values:
+        Execute query
+        :param query:str SQL query
+        :param values:None or Collection Parameters of query
         :return:
+            True: executed successful
+            False: error printed in log.
         """
         try:
             if values is None or len(values) == 0:
@@ -87,15 +121,18 @@ class DatabaseConnector:
             else:
                 self.cursor.execute(query, values)
         except BaseException as err:
-            logging.error("Could not select values. {}".format(err))
+            logging.error(f"Could not select values. {err}")
             return False
+
         return True
 
     def commit(self) -> bool:
 
         """
-        TODO
+        Commit database changes
         :return:
+            True successful
+            False: error printed in log.
         """
         try:
             self.database.commit()

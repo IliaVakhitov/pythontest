@@ -2,14 +2,16 @@ import codecs
 import json
 import logging
 from json import JSONDecodeError
-from typing import List, Optional
 from os import path
-from Model.Dictionary import DictEntry
+from typing import List, Optional
+
+from Model.DatabaseConnector import DatabaseConnector
+from Model.DictEntry import DictEntry
 from Model.GameGenerator import GameGenerator
 from Model.GameRound import GameRound
-from Model.DatabaseConnector import DatabaseConnector
 from Model.GameType import GameType
-from Model.Model import Model
+from Model.ModelDictionaries import Model
+from Model.QueryManager import QueryManager
 from Model.SQLType import SQLType
 
 
@@ -26,10 +28,10 @@ class ModelSQL(Model):
     def __init__(self) -> None:
 
         # Default values
-
         self.game_rounds = 10
         self.load_properties()
         self.database_connector: DatabaseConnector = DatabaseConnector()
+        self.query_manager: QueryManager = QueryManager(self.database_connector.sql_type)
 
     def save_state(self, game_rounds: Optional[List[GameRound]]) -> bool:
 
@@ -42,15 +44,6 @@ class ModelSQL(Model):
 
         if game_rounds is None:
             return False
-
-        update_query = """
-            UPDATE 
-                words
-            SET 
-                learning_index = %(learning_index)s
-            WHERE 
-                id = %(id)s;
-            """
 
         logging.info("Updating learning_index in database")
         for game_round in game_rounds:
@@ -65,14 +58,11 @@ class ModelSQL(Model):
                 'learning_index': game_round.new_learning_index,
                 'id': game_round.dictionary_entry.sql_id}
 
-            result = self.database_connector.execute_query(update_query, args)
+            result = self.database_connector.execute_query(self.query_manager.query_update_words(), args)
             if not result:
                 return False
 
         return self.database_connector.commit()
-
-    def load_dictionaries(self):
-        pass
 
     def reset_progress(self, words):
         super().reset_progress(words)
@@ -83,7 +73,6 @@ class ModelSQL(Model):
     def generate_game(
             self,
             game_type: GameType,
-            word_limit: int = 0,
             dictionaries: Optional[List[str]] = None) -> Optional[List[GameRound]]:
 
         """
@@ -99,54 +88,16 @@ class ModelSQL(Model):
         """
         # Logs
         logging.info("Generating game.")
-        if 0 < word_limit < 4:
+        if 0 < self.game_rounds < 4:
             logging.info("Not enough words to generate game!")
             return None
 
         logging.info(f"game_type {game_type}")
-        logging.info(f"Word_limit {word_limit}")
+        logging.info(f"Word_limit {self.game_rounds}")
         logging.info(f"Dictionaries {dictionaries}")
+        query_dict = self.query_manager.query_select_words(self.game_rounds, dictionaries)
 
-        words_query = """
-            SELECT
-                id, 
-                spelling, 
-                translation,
-                learning_index
-            FROM
-                words
-            """
-        # Condition is used if param dictionaries if defined
-        dictionary_condition = """
-            WHERE
-                dictionary in (%s)
-            """
-
-        if dictionaries is not None and len(dictionaries) > 0:
-            in_condition = ','.join(['%s'] * len(dictionaries))
-            words_query += dictionary_condition % in_condition
-
-        # TODO put into DatabaseConnector class
-        rand_function = "RAND()" if self.database_connector.sql_type == SQLType.MySQL else "RANDOM()"
-        words_query += f"""
-            ORDER BY 
-                {rand_function}
-            """
-
-        # Condition is used if param word_limit if defined
-        limit_condition = """
-            LIMIT %s;
-            """
-
-        # Generating list of parameters for cursor query
-        args: List = list()
-        if dictionaries is not None and len(dictionaries) > 0:
-            args = list(dictionaries)
-        if word_limit != 0:
-            words_query += limit_condition
-            args.append(word_limit)
-
-        if not self.database_connector.execute_query(words_query, args):
+        if not self.database_connector.execute_query(query_dict['query_select_words'], query_dict['args']):
             logging.error("Error in Select query.")
             return None
 
@@ -159,9 +110,16 @@ class ModelSQL(Model):
         return GameGenerator.generate_game(words_list, game_type)
 
     def play_game(self, game_rounds: List[GameRound], automatic_mode: bool = False) -> None:
+
         super().play_game(game_rounds, automatic_mode)
 
     def load_properties(self) -> bool:
+
+        """
+        TODO
+        :return:
+        """
+
         filename = "config.json"
         if not path.exists(filename):
             logging.info(f"File config.json was not found. Using default values.")
@@ -190,3 +148,5 @@ class ModelSQL(Model):
 
         return True
 
+    def load_dictionaries(self):
+        pass
