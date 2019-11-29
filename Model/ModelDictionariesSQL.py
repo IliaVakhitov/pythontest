@@ -12,7 +12,6 @@ from Model.GameRound import GameRound
 from Model.GameType import GameType
 from Model.ModelDictionaries import Model
 from Model.QueryManager import QueryManager
-from Model.SQLType import SQLType
 
 
 class ModelSQL(Model):
